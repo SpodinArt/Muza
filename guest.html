@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Помощь исполнителю</title>
+    <style>
+      /* Стили для видео фона */
+      #bg-video {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        object-fit: cover;
+        z-index: -1;
+      }
+
+      /* Основные стили */
+      body {
+        padding-top: 700px; /* Подбирайте значение под высоту вашего h2 */
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        color: #ddd0bd;
+        min-height: 100vh;
+        position: relative;
+      }
+
+      .content {
+        padding: 0 10px; /* Отступы по бокам */
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .container {
+        flex: 1; /* Занимает все доступное пространство */
+        margin: 0;
+        padding: 20px;
+        background-color: rgba(56, 56, 56, 0.8);
+        border-radius: 10px;
+        text-align: center;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        display: flex;
+        flex-direction: column;
+        justify-content: center; /* Вертикальное центрирование содержимого */
+        align-items: center;
+      }
+
+      h1 {
+        font-size: 40px;
+        margin-bottom: 30px;
+        color: #aac5d8;
+        line-height: 1.4;
+      }
+
+      .logo {
+        /* Фиксированное позиционирование */
+        position: fixed;
+        top: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 100%;
+        max-width: 40%;
+        text-align: center;
+        background-color: transparent; /* Прозрачный фон */
+        z-index: 1000; /* Чтобы текст был поверх других элементов */
+        padding: 20px 0; /* Отступы сверху и снизу */
+      }
+
+      .features {
+        margin-bottom: 40px;
+      }
+
+      .feature-item {
+        margin-bottom: 15px;
+        font-size: 40px;
+        line-height: 1.6;
+        color: #aac5d8;
+      }
+
+      .cta-button {
+        display: inline-block;
+        padding: 15px 40px;
+        background-color: #ddd0bd;
+        color: #383838;
+        text-decoration: none;
+        border-radius: 30px;
+        font-size: 20px;
+        font-weight: bold;
+        transition: all 0.3s;
+        border: 2px solid #d3aa58;
+        cursor: pointer;
+        max-width: 300px;
+      }
+
+      .cta-button:hover {
+        background-color: #ddd0bd;
+        color: #ddd0bd;
+        transform: translateY(-2px);
+      }
+      .fixed-image {
+        position: fixed; /* Фиксированное позиционирование */
+        top: 0; /* Прижимаем к верхнему краю */
+        left: 50%; /* Центрирование по горизонтали */
+        transform: translateX(-50%); /* Точное выравнивание по центру */
+        z-index: 1000; /* Убедитесь, что изображение поверх других элементов */
+        width: 20%; /* Защита от переполнения */
+      }
+    </style>
+  </head>
+  <body>
+    <img src="LOGOMUZA2.png" alt="Описание изображения" class="logo" />
+    <video autoplay muted loop id="bg-video">
+      <source src="video.mp4" type="video/mp4" />
+    </video>
+
+    <div class="content">
+      <div class="container">
+        <h1>Помощь исполнителю, в освоении музыки и поиску вдохновения.</h1>
+        <div class="features">
+          <div class="feature-item">
+            Генерация музыки в миди формата, табов и нот.
+          </div>
+        </div>
+        <a href="#" class="cta-button">Попробуйте бесплатно</a>
+      </div>
+    </div>
+  </body>
+</html>
