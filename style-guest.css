@@ -5,8 +5,8 @@
   position: fixed;
   top: 0;
   left: 0;
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
   object-fit: cover;
   z-index: -1;
 }
@@ -34,9 +34,12 @@ body {
 }
 
 .container {
-  margin: 100px auto 100px;
+  margin: 5%;
+  margin-right: 2%;
+  margin-left: 2%;
   padding: 20px;
-  max-width: 800px;
+  /* max-width: 1280px; */
+
   border-radius: 10px;
   text-align: center;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
@@ -57,10 +60,16 @@ h1 {
   -webkit-text-stroke: 1px #d3aa58;
   filter: drop-shadow(1px 1px 0 #d3aa58);
   font-family: "Comfortaa-SemiBold";
+  font-weight: 600;
 }
 
 .logo {
   margin: 0 auto;
+  max-width: 380px;
+  width: 100%;
+  height: auto;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .features {
@@ -68,10 +77,11 @@ h1 {
 }
 
 .feature-item {
-  margin-bottom: 15px;
   font-size: 30px;
-  line-height: 1.6;
+  line-height: 1.4;
   color: #aac5d8;
+  text-align: center;
+  vertical-align: middle;
 }
 
 .cta-button {
@@ -80,18 +90,22 @@ h1 {
   background-color: #ddd0bd;
   color: #383838;
   text-decoration: none;
-  border-radius: 30px;
+  border-radius: 20px;
   font-size: 20px;
   font-weight: bold;
   transition: all 0.3s;
   border: 2px solid #d3aa58;
   cursor: pointer;
-  max-width: 300px;
+  /* max-width: 300px;*/
   transition: all 0.2s linear;
 }
 
 .cta-button--guest {
   margin: 0 auto;
+  font-family: inherit;
+  font-weight: inherit; /* inherit наследовать от родителя*/
+  font-size: 35px;
+  text-align: center;
 }
 
 .cta-button--guest:hover {
