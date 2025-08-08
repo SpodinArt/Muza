@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Авторизация и регистрация</title>
+     <script src="./scripts/registration.js" defer type="module"></script>
   <link rel="stylesheet" href="style-registration.css" />
   </head>
   <body>
@@ -36,15 +37,15 @@
         <!-- Форма входа -->
         <form id="login-form" class="auth-form active">
           <div class="form-group">
-            <label for="login-email">Email</label>
+            <label for="login-email">eMail или Телефон</label>
             <input
-              type="email"
+              type="text"
               id="login-email"
               class="form-control"
-              placeholder="Введите ваш email"
+              placeholder="Введите ваш email или телефон"
             />
             <div class="invalid-feedback">
-              Пожалуйста, введите корректный email
+              Пожалуйста, введите корректный email или телефон
             </div>
           </div>
           <div class="form-group">
@@ -111,10 +112,10 @@
           <div class="form-group">
             <label for="register-phone">Телефон</label>
             <input
-              type="tel"
+              type="text"
               id="register-phone"
               class="form-control"
-              placeholder="+7 (___) ___-__-__"
+              placeholder="+7 (XXX) XXX-XX-XX или XXX-XXX-XX-XX"
             />
             <div class="invalid-feedback">
               Пожалуйста, введите корректный номер телефона
@@ -167,211 +168,6 @@
       </div>
     </div>
 
-    <script>
-      document.addEventListener("DOMContentLoaded", function () {
-        // Переключение между табами
-        const tabs = document.querySelectorAll(".auth-tab");
-        const forms = document.querySelectorAll(".auth-form");
-
-        tabs.forEach((tab) => {
-          tab.addEventListener("click", function () {
-            // Удаляем активный класс у всех табов и форм
-            tabs.forEach((t) => t.classList.remove("active"));
-            forms.forEach((f) => f.classList.remove("active"));
-
-            // Добавляем активный класс текущему табу и соответствующей форме
-            this.classList.add("active");
-            const tabName = this.getAttribute("data-tab");
-            document.getElementById(`${tabName}-form`).classList.add("active");
-          });
-        });
-
-        // Маска для телефона
-        const phoneInput = document.getElementById("register-phone");
-        phoneInput.addEventListener("input", function (e) {
-          let x = e.target.value
-            .replace(/\D/g, "")
-            .match(/(\d{0,1})(\d{0,3})(\d{0,3})(\d{0,2})(\d{0,2})/);
-          e.target.value = !x[2]
-            ? "+7" + x[1]
-            : "+7 (" +
-              x[2] +
-              ") " +
-              x[3] +
-              (x[4] ? "-" + x[4] : "") +
-              (x[5] ? "-" + x[5] : "");
-        });
-
-        // Валидация форм
-        const loginForm = document.getElementById("login-form");
-        const registerForm = document.getElementById("register-form");
-
-        // Функция проверки email
-        function validateEmail(email) {
-          const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-          return re.test(email);
-        }
-
-        // Функция проверки телефона
-        function validatePhone(phone) {
-          const re = /^\+7 \(\d{3}\) \d{3}-\d{2}-\d{2}$/;
-          return re.test(phone);
-        }
-
-        // Функция проверки пароля
-        function validatePassword(password) {
-          return password.length >= 6;
-        }
-
-        // Валидация формы входа
-        loginForm.addEventListener("submit", function (e) {
-          e.preventDefault();
-          let isValid = true;
-
-          const email = document.getElementById("login-email");
-          const password = document.getElementById("login-password");
-          const emailError = email.nextElementSibling;
-          const passwordError = password.nextElementSibling;
-
-          // Проверка email
-          if (!validateEmail(email.value)) {
-            email.classList.add("is-invalid");
-            emailError.style.display = "block";
-            isValid = false;
-          } else {
-            email.classList.remove("is-invalid");
-            emailError.style.display = "none";
-          }
-
-          // Проверка пароля
-          if (!validatePassword(password.value)) {
-            password.classList.add("is-invalid");
-            passwordError.style.display = "block";
-            isValid = false;
-          } else {
-            password.classList.remove("is-invalid");
-            passwordError.style.display = "none";
-          }
-
-          if (isValid) {
-            alert("Вход выполнен успешно!");
-            // Здесь можно добавить отправку формы на сервер
-          }
-        });
-
-        // Валидация формы регистрации
-        registerForm.addEventListener("submit", function (e) {
-          e.preventDefault();
-          let isValid = true;
-
-          const name = document.getElementById("register-name");
-          const email = document.getElementById("register-email");
-          const phone = document.getElementById("register-phone");
-          const password = document.getElementById("register-password");
-          const confirmPassword = document.getElementById(
-            "register-confirm-password"
-          );
-
-          const nameError = name.nextElementSibling;
-          const emailError = email.nextElementSibling;
-          const phoneError = phone.nextElementSibling;
-          const passwordError = password.nextElementSibling;
-          const confirmPasswordError = confirmPassword.nextElementSibling;
-
-          // Проверка имени
-          if (name.value.trim() === "") {
-            name.classList.add("is-invalid");
-            nameError.style.display = "block";
-            isValid = false;
-          } else {
-            name.classList.remove("is-invalid");
-            nameError.style.display = "none";
-          }
-
-          // Проверка email
-          if (!validateEmail(email.value)) {
-            email.classList.add("is-invalid");
-            emailError.style.display = "block";
-            isValid = false;
-          } else {
-            email.classList.remove("is-invalid");
-            emailError.style.display = "none";
-          }
-
-          // Проверка телефона
-          if (!validatePhone(phone.value)) {
-            phone.classList.add("is-invalid");
-            phoneError.style.display = "block";
-            isValid = false;
-          } else {
-            phone.classList.remove("is-invalid");
-            phoneError.style.display = "none";
-          }
-
-          // Проверка пароля
-          if (!validatePassword(password.value)) {
-            password.classList.add("is-invalid");
-            passwordError.style.display = "block";
-            isValid = false;
-          } else {
-            password.classList.remove("is-invalid");
-            passwordError.style.display = "none";
-          }
-
-          // Проверка подтверждения пароля
-          if (password.value !== confirmPassword.value) {
-            confirmPassword.classList.add("is-invalid");
-            confirmPasswordError.style.display = "block";
-            isValid = false;
-          } else {
-            confirmPassword.classList.remove("is-invalid");
-            confirmPasswordError.style.display = "none";
-          }
-
-          if (isValid) {
-            alert("Регистрация прошла успешно!");
-            // Здесь можно добавить отправку формы на сервер
-          }
-        });
-
-        // Имитация входа через Google
-        document
-          .getElementById("google-login")
-          .addEventListener("click", function () {
-            alert("Вход через Google");
-            // Здесь можно добавить реальную интеграцию с Google OAuth
-          });
-
-        document
-          .getElementById("google-register")
-          .addEventListener("click", function () {
-            alert("Регистрация через Google");
-            // Здесь можно добавить реальную интеграцию с Google OAuth
-          });
-
-        // Имитация входа через Yandex
-        document
-          .getElementById("yandex-login")
-          .addEventListener("click", function () {
-            alert("Вход через Yandex");
-            // Здесь можно добавить реальную интеграцию с Yandex OAuth
-          });
-
-        document
-          .getElementById("yandex-register")
-          .addEventListener("click", function () {
-            alert("Регистрация через Yandex");
-            // Здесь можно добавить реальную интеграцию с Yandex OAuth
-          });
-
-        // Забыли пароль
-        document
-          .getElementById("forgot-password")
-          .addEventListener("click", function (e) {
-            e.preventDefault();
-            alert("Функция восстановления пароля");
-          });
-      });
-    </script>
+   
   </body>
 </html>
