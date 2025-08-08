@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Авторизация и регистрация</title>
+  <link rel="stylesheet" href="style-registration.css" />
+  </head>
+  <body>
+    <!-- Видео фон -->
+    <video id="bg-video" autoplay loop muted>
+      <source src="video.mp4" type="video/mp4" />
+    </video>
+
+    <!-- Основной контейнер -->
+    <div class="auth-container">
+      <div class="auth-card">
+        <div class="auth-header">
+          <div class="content">
+      <img
+        src="LOGO2.png"
+        width="380"
+        height="121"
+        alt="Описание изображения"
+        class="logo"
+      />
+          <p>Войдите или зарегистрируйтесь, чтобы продолжить</p>
+        </div>
+
+        <!-- Табы авторизации/регистрации -->
+        <div class="auth-tabs">
+          <div class="auth-tab active" data-tab="login">Вход</div>
+          <div class="auth-tab" data-tab="register">Регистрация</div>
+        </div>
+
+        <!-- Форма входа -->
+        <form id="login-form" class="auth-form active">
+          <div class="form-group">
+            <label for="login-email">Email</label>
+            <input
+              type="email"
+              id="login-email"
+              class="form-control"
+              placeholder="Введите ваш email"
+            />
+            <div class="invalid-feedback">
+              Пожалуйста, введите корректный email
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="login-password">Пароль</label>
+            <input
+              type="password"
+              id="login-password"
+              class="form-control"
+              placeholder="Введите ваш пароль"
+            />
+            <div class="invalid-feedback">
+              Пароль должен содержать минимум 6 символов
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary">Войти</button>
+
+          <div class="social-login">
+            <p>Или войдите через</p>
+            <div class="social-buttons">
+              <div class="social-btn" id="google-login">
+                <img
+                  src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg"
+                  alt="Google"
+                />
+              </div>
+              <div class="social-btn" id="yandex-login">
+                <img
+                  src="https://upload.wikimedia.org/wikipedia/commons/5/57/Yandex_icon.svg"
+                  alt="Yandex"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div class="auth-footer">
+            <a href="#" id="forgot-password">Забыли пароль?</a>
+          </div>
+        </form>
+
+        <!-- Форма регистрации -->
+        <form id="register-form" class="auth-form">
+          <div class="form-group">
+            <label for="register-name">Имя</label>
+            <input
+              type="text"
+              id="register-name"
+              class="form-control"
+              placeholder="Введите ваше имя"
+            />
+            <div class="invalid-feedback">Пожалуйста, введите ваше имя</div>
+          </div>
+          <div class="form-group">
+            <label for="register-email">Email</label>
+            <input
+              type="email"
+              id="register-email"
+              class="form-control"
+              placeholder="Введите ваш email"
+            />
+            <div class="invalid-feedback">
+              Пожалуйста, введите корректный email
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="register-phone">Телефон</label>
+            <input
+              type="tel"
+              id="register-phone"
+              class="form-control"
+              placeholder="+7 (___) ___-__-__"
+            />
+            <div class="invalid-feedback">
+              Пожалуйста, введите корректный номер телефона
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="register-password">Пароль</label>
+            <input
+              type="password"
+              id="register-password"
+              class="form-control"
+              placeholder="Придумайте пароль"
+            />
+            <div class="invalid-feedback">
+              Пароль должен содержать минимум 6 символов
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="register-confirm-password">Подтвердите пароль</label>
+            <input
+              type="password"
+              id="register-confirm-password"
+              class="form-control"
+              placeholder="Повторите пароль"
+            />
+            <div class="invalid-feedback">Пароли не совпадают</div>
+          </div>
+          <button type="submit" class="btn btn-primary">
+            Зарегистрироваться
+          </button>
+
+          <div class="social-login">
+            <p>Или зарегистрируйтесь через</p>
+            <div class="social-buttons">
+              <div class="social-btn" id="google-register">
+                <img
+                  src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg"
+                  alt="Google"
+                />
+              </div>
+              <div class="social-btn" id="yandex-register">
+                <img
+                  src="https://upload.wikimedia.org/wikipedia/commons/5/57/Yandex_icon.svg"
+                  alt="Yandex"
+                />
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        // Переключение между табами
+        const tabs = document.querySelectorAll(".auth-tab");
+        const forms = document.querySelectorAll(".auth-form");
+
+        tabs.forEach((tab) => {
+          tab.addEventListener("click", function () {
+            // Удаляем активный класс у всех табов и форм
+            tabs.forEach((t) => t.classList.remove("active"));
+            forms.forEach((f) => f.classList.remove("active"));
+
+            // Добавляем активный класс текущему табу и соответствующей форме
+            this.classList.add("active");
+            const tabName = this.getAttribute("data-tab");
+            document.getElementById(`${tabName}-form`).classList.add("active");
+          });
+        });
+
+        // Маска для телефона
+        const phoneInput = document.getElementById("register-phone");
+        phoneInput.addEventListener("input", function (e) {
+          let x = e.target.value
+            .replace(/\D/g, "")
+            .match(/(\d{0,1})(\d{0,3})(\d{0,3})(\d{0,2})(\d{0,2})/);
+          e.target.value = !x[2]
+            ? "+7" + x[1]
+            : "+7 (" +
+              x[2] +
+              ") " +
+              x[3] +
+              (x[4] ? "-" + x[4] : "") +
+              (x[5] ? "-" + x[5] : "");
+        });
+
+        // Валидация форм
+        const loginForm = document.getElementById("login-form");
+        const registerForm = document.getElementById("register-form");
+
+        // Функция проверки email
+        function validateEmail(email) {
+          const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+          return re.test(email);
+        }
+
+        // Функция проверки телефона
+        function validatePhone(phone) {
+          const re = /^\+7 \(\d{3}\) \d{3}-\d{2}-\d{2}$/;
+          return re.test(phone);
+        }
+
+        // Функция проверки пароля
+        function validatePassword(password) {
+          return password.length >= 6;
+        }
+
+        // Валидация формы входа
+        loginForm.addEventListener("submit", function (e) {
+          e.preventDefault();
+          let isValid = true;
+
+          const email = document.getElementById("login-email");
+          const password = document.getElementById("login-password");
+          const emailError = email.nextElementSibling;
+          const passwordError = password.nextElementSibling;
+
+          // Проверка email
+          if (!validateEmail(email.value)) {
+            email.classList.add("is-invalid");
+            emailError.style.display = "block";
+            isValid = false;
+          } else {
+            email.classList.remove("is-invalid");
+            emailError.style.display = "none";
+          }
+
+          // Проверка пароля
+          if (!validatePassword(password.value)) {
+            password.classList.add("is-invalid");
+            passwordError.style.display = "block";
+            isValid = false;
+          } else {
+            password.classList.remove("is-invalid");
+            passwordError.style.display = "none";
+          }
+
+          if (isValid) {
+            alert("Вход выполнен успешно!");
+            // Здесь можно добавить отправку формы на сервер
+          }
+        });
+
+        // Валидация формы регистрации
+        registerForm.addEventListener("submit", function (e) {
+          e.preventDefault();
+          let isValid = true;
+
+          const name = document.getElementById("register-name");
+          const email = document.getElementById("register-email");
+          const phone = document.getElementById("register-phone");
+          const password = document.getElementById("register-password");
+          const confirmPassword = document.getElementById(
+            "register-confirm-password"
+          );
+
+          const nameError = name.nextElementSibling;
+          const emailError = email.nextElementSibling;
+          const phoneError = phone.nextElementSibling;
+          const passwordError = password.nextElementSibling;
+          const confirmPasswordError = confirmPassword.nextElementSibling;
+
+          // Проверка имени
+          if (name.value.trim() === "") {
+            name.classList.add("is-invalid");
+            nameError.style.display = "block";
+            isValid = false;
+          } else {
+            name.classList.remove("is-invalid");
+            nameError.style.display = "none";
+          }
+
+          // Проверка email
+          if (!validateEmail(email.value)) {
+            email.classList.add("is-invalid");
+            emailError.style.display = "block";
+            isValid = false;
+          } else {
+            email.classList.remove("is-invalid");
+            emailError.style.display = "none";
+          }
+
+          // Проверка телефона
+          if (!validatePhone(phone.value)) {
+            phone.classList.add("is-invalid");
+            phoneError.style.display = "block";
+            isValid = false;
+          } else {
+            phone.classList.remove("is-invalid");
+            phoneError.style.display = "none";
+          }
+
+          // Проверка пароля
+          if (!validatePassword(password.value)) {
+            password.classList.add("is-invalid");
+            passwordError.style.display = "block";
+            isValid = false;
+          } else {
+            password.classList.remove("is-invalid");
+            passwordError.style.display = "none";
+          }
+
+          // Проверка подтверждения пароля
+          if (password.value !== confirmPassword.value) {
+            confirmPassword.classList.add("is-invalid");
+            confirmPasswordError.style.display = "block";
+            isValid = false;
+          } else {
+            confirmPassword.classList.remove("is-invalid");
+            confirmPasswordError.style.display = "none";
+          }
+
+          if (isValid) {
+            alert("Регистрация прошла успешно!");
+            // Здесь можно добавить отправку формы на сервер
+          }
+        });
+
+        // Имитация входа через Google
+        document
+          .getElementById("google-login")
+          .addEventListener("click", function () {
+            alert("Вход через Google");
+            // Здесь можно добавить реальную интеграцию с Google OAuth
+          });
+
+        document
+          .getElementById("google-register")
+          .addEventListener("click", function () {
+            alert("Регистрация через Google");
+            // Здесь можно добавить реальную интеграцию с Google OAuth
+          });
+
+        // Имитация входа через Yandex
+        document
+          .getElementById("yandex-login")
+          .addEventListener("click", function () {
+            alert("Вход через Yandex");
+            // Здесь можно добавить реальную интеграцию с Yandex OAuth
+          });
+
+        document
+          .getElementById("yandex-register")
+          .addEventListener("click", function () {
+            alert("Регистрация через Yandex");
+            // Здесь можно добавить реальную интеграцию с Yandex OAuth
+          });
+
+        // Забыли пароль
+        document
+          .getElementById("forgot-password")
+          .addEventListener("click", function (e) {
+            e.preventDefault();
+            alert("Функция восстановления пароля");
+          });
+      });
+    </script>
+  </body>
+</html>
