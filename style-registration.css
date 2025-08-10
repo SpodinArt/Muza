@@ -109,8 +109,12 @@ body {
   width: 100%;
   animation: fadeIn 0.5s ease-out;
 }
-
+/* ниже возможно удалить */
 .auth-form.active {
+  display: block;
+}
+
+.invalid-feedback.show {
   display: block;
 }
 
@@ -338,4 +342,75 @@ body {
 /* Переопределяем ширину 90% для полей внутри группы */
 .form-group .phone-input-group .form-control {
   width: auto;
+}
+/* Стили для International Telephone Input */
+.custom-iti {
+  width: 100%;
+  border: 1px solid #d3aa58;
+  border-radius: 8px;
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.custom-iti:focus-within {
+  border-color: #aac5d8;
+  box-shadow: 0 0 0 2px rgba(170, 197, 216, 0.3);
+}
+
+.custom-iti .iti__flag-container {
+  padding: 0;
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.custom-iti .iti__selected-flag {
+  padding: 0 0 0 15px;
+  background-color: transparent;
+}
+
+.custom-iti .iti__country-list {
+  background-color: rgba(0, 0, 0, 0.9);
+  border: 1px solid #d3aa58;
+  color: #ddd0bd;
+}
+
+.custom-iti .iti__country-list .iti__country {
+  padding: 8px 10px;
+}
+
+.custom-iti .iti__country-list .iti__country:hover {
+  background-color: rgba(211, 170, 88, 0.2);
+}
+
+.custom-iti .iti__country-list .iti__country.iti__highlight {
+  background-color: rgba(211, 170, 88, 0.3);
+}
+
+.custom-iti .iti__flag-container .iti__arrow {
+  border-top-color: #ddd0bd;
+  margin-left: 6px;
+}
+
+.custom-iti input {
+  background-color: transparent;
+  color: #ddd0bd;
+  border: none;
+  width: 100%;
+  padding: 15px;
+  height: auto;
+}
+
+.custom-iti input:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+/* Адаптивность */
+@media (max-width: 480px) {
+  .custom-iti .iti__selected-flag {
+    padding: 0 0 0 10px;
+  }
+
+  .custom-iti input {
+    padding: 15px 10px;
+    font-size: 14px;
+  }
 }
