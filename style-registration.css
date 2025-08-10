@@ -345,7 +345,7 @@ body {
 }
 /* Стили для International Telephone Input */
 .custom-iti {
-  width: 100%;
+  width: 107%;
   border: 1px solid #d3aa58;
   border-radius: 8px;
   background-color: rgba(255, 255, 255, 0.1);
@@ -413,4 +413,32 @@ body {
     padding: 15px 10px;
     font-size: 14px;
   }
+}
+
+/* Контейнер для поля телефона */
+.phone-input-container {
+  width: 90%;
+  display: block;
+}
+
+/* Переопределение стилей библиотеки */
+.phone-input-container .intl-tel-input {
+  width: 100% !important;
+}
+
+/* Стили для input внутри библиотеки */
+.phone-input-container .intl-tel-input input {
+  width: 100% !important;
+  padding: 15px;
+  background: transparent;
+  border: 1px solid #d3aa58;
+  border-radius: 8px;
+  color: #ddd0bd;
+  font-size: 16px;
+}
+
+/* Фокус-стили */
+.phone-input-container .intl-tel-input input:focus {
+  border-color: #aac5d8;
+  box-shadow: 0 0 0 2px rgba(170, 197, 216, 0.3);
 }

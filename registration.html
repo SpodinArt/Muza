@@ -9,10 +9,6 @@
       <!-- Подключаем библиотеку International Telephone Input -->
      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
-  <!-- изменить название скриптадля обработки телефона
-  <script src="./scripts/registration.js" defer type="module"></script> 
-  -->
-
   </head>
   <body>
     <!-- Видео фон -->
@@ -119,12 +115,14 @@
        
           <div class="form-group">
           <label for="register-phone">Телефон</label>
+          <div class="phone-input-container"> <!-- Добавленная обертка -->
           <input
             type="tel"
             id="register-phone"
             class="form-control"
             placeholder="Введите номер телефона"
           />
+          </div>
           <div class="invalid-feedback">
             Пожалуйста, введите корректный номер телефона
           </div>
