@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Авторизация и регистрация</title>
+     <script src="./scripts/registration.js" defer type="module"></script>
+  <link rel="stylesheet" href="style-registration.css" />
+  </head>
+  <body>
+    <!-- ... видеофон и контейнер ... -->
+
+    <!-- Форма регистрации -->
+    <form id="register-form" class="auth-form">
+      <!-- ... другие поля ... -->
+
+      <div class="form-group">
+        <label for="register-phone">Телефон</label>
+        <div class="phone-input-group">
+          <select id="country-code" class="country-code-select">
+            <option value="+7">+7 (RU)</option>
+            <option value="+380">+380 (UA)</option>
+            <option value="+375">+375 (BY)</option>
+            <option value="+1">+1 (US)</option>
+            <option value="+44">+44 (UK)</option>
+            <option value="+49">+49 (DE)</option>
+            <option value="+33">+33 (FR)</option>
+            <option value="+86">+86 (CN)</option>
+          </select>
+          <input
+            type="text"
+            id="register-phone"
+            class="form-control phone-number"
+            placeholder="XXX-XXX-XX-XX"
+          />
+        </div>
+        <div class="invalid-feedback">
+          Пожалуйста, введите корректный номер телефона
+        </div>
+      </div>
+
+      <!-- ... остальные поля и кнопка ... -->
+    </form>
+
+    <!-- ... остальная часть body ... -->
+  </body>
+</html>
