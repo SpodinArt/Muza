@@ -5,7 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Авторизация и регистрация</title>
     <script src="./scripts/registration.js" defer type="module"></script>
+    <script src="./scripts/reset_password.js" defer></script>
     <link rel="stylesheet" href="/css/style-registration.css" />
+    <!-- забыл пароль -->
     <!-- Подключаем библиотеку International Telephone Input -->
     <link
       rel="stylesheet"
@@ -85,7 +87,36 @@
             <a href="#" id="forgot-password">Забыли пароль?</a>
           </div>
         </form>
-
+        <!-- Форма восстановления пароля -->
+        <div id="reset-password-form" class="auth-form">
+          <h2>Восстановление пароля</h2>
+          <p>
+            Укажите вашу электронную почту, и мы отправим инструкцию по сбросу
+            пароля.
+          </p>
+          <div class="form-group">
+            <label for="reset-email">Электронная почта:</label>
+            <input
+              type="email"
+              id="reset-email"
+              class="form-control"
+              required
+            />
+            <div class="invalid-feedback">
+              Некорректный адрес электронной почты!
+            </div>
+          </div>
+          <button
+            type="button"
+            class="btn btn-primary"
+            onclick="sendResetPassword()"
+          >
+            Отправить
+          </button>
+          <button type="button" class="btn btn-link" onclick="showLoginForm()">
+            Вернуться назад
+          </button>
+        </div>
         <!-- Форма регистрации -->
         <form id="register-form" class="auth-form">
           <div class="form-group">
