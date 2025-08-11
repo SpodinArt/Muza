@@ -195,17 +195,19 @@ body {
   content: "";
   position: absolute;
   top: 50%;
-  width: 30%;
+  width: 10%;
   height: 1px;
   background-color: #d3aa58;
 }
 
 .social-login p::before {
   left: 0;
+  margin-left: 1%;
 }
 
 .social-login p::after {
   right: 0;
+  margin-right: 1%;
 }
 
 .social-buttons {
@@ -233,8 +235,8 @@ body {
 }
 
 .social-btn img {
-  width: 25px;
-  height: 25px;
+  width: 50px;
+  height: 50px;
 }
 
 .auth-footer {
