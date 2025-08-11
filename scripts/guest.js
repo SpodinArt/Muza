@@ -1,5 +1,5 @@
-// Получаем объект видео по ID
-const video = document.getElementById("bg-video");
+import { initVideoSpeed } from "./guest-script/VideoSpeed.js";
 
-// Устанавливаем скорость воспроизведения на 0.5 (замедление в 2 раза)
-video.playbackRate = 0.5;
+document.addEventListener("DOMContentLoaded", () => {
+  initVideoSpeed(); // Инициализируем контроль скорости видео
+});

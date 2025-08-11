@@ -4,6 +4,7 @@ import { initRegisterForm } from "./reg-script/registerForm.js";
 import { initSocialAuth } from "./reg-script/socialAuth.js";
 import { initForgotPassword } from "./reg-script/forgotPassword.js";
 import { initTelInput } from "./reg-script/validTelNumberRegistration.js"; // Добавляем импорт
+import { initVideoSpeed } from "./guest-script/VideoSpeed.js";
 
 document.addEventListener("DOMContentLoaded", () => {
   initTabSwitcher();
@@ -13,4 +14,5 @@ document.addEventListener("DOMContentLoaded", () => {
   initRegisterForm();
   initSocialAuth();
   initForgotPassword();
+  initVideoSpeed(); // Инициализируем контроль скорости видео
 });
