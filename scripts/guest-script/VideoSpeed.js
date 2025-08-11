@@ -1,6 +1,6 @@
 export function initVideoSpeed() {
   const video = document.getElementById("bg-video");
-  
+
   if (video) {
     video.playbackRate = 0.5;
   } else {
