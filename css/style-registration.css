@@ -133,7 +133,7 @@ body {
 .form-control {
   width: 90%;
   padding: 15px;
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: #ddd0bda1;
   border: 1px solid #d3aa58;
   border-radius: 8px;
   font-size: 16px;
@@ -350,7 +350,7 @@ body {
   width: 107%;
   border: 1px solid #d3aa58;
   border-radius: 8px;
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: #ddd0bda1;
 }
 
 .custom-iti:focus-within {
@@ -371,7 +371,7 @@ body {
 .custom-iti .iti__country-list {
   background-color: rgba(0, 0, 0, 0.9);
   border: 1px solid #d3aa58;
-  color: #ddd0bd;
+  color: #ddd0bda1;
 }
 
 .custom-iti .iti__country-list .iti__country {

@@ -40,8 +40,12 @@
 
         <!-- Табы авторизации/регистрации -->
         <div class="auth-tabs">
-          <div class="auth-tab active" data-tab="login" id="buttonLogin">Вход</div>
-          <div class="auth-tab" data-tab="register" id="buttonegister">Регистрация</div>
+          <div class="auth-tab active" data-tab="login" id="buttonLogin">
+            Вход
+          </div>
+          <div class="auth-tab" data-tab="register" id="buttonegister">
+            Регистрация
+          </div>
         </div>
 
         <!-- Форма входа -->
@@ -72,7 +76,7 @@
           </div>
           <button type="submit" class="btn btn-primary">Войти</button>
 
-          <div class="social-login">
+          <div class="social-login" style="display: none !important">
             <p>Или войдите через</p>
             <div class="social-buttons">
               <div class="social-btn" id="google-login">
@@ -205,8 +209,8 @@
           <button type="submit" class="btn btn-primary">
             Зарегистрироваться
           </button>
-
-          <div class="social-login">
+          <!-- удалить none когда прикрутишь авторизацию через сторонние сервисы -->
+          <div class="social-login" style="display: none !important">
             <p>Или зарегистрируйтесь через</p>
             <div class="social-buttons">
               <div class="social-btn" id="google-register">

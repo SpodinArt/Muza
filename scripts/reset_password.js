@@ -27,10 +27,13 @@ function showLoginForm() {
 // Отправляем запрос на восстановление пароля
 function sendResetPassword() {
   const resetEmail = document.getElementById("reset-email").value.trim();
+  const emailFeedback = document.querySelector(
+    "#reset-email + .invalid-feedback"
+  );
 
   // Проверка валидности email
   if (!validateEmail(resetEmail)) {
-    alert("Некорректный адрес электронной почты!");
+    emailFeedback.style.display = "block";
     return false;
   }
 
@@ -63,7 +66,6 @@ document
 // }
 // hidePasswordForm();
 // //
-
 
 // // Функция проверки валидности email
 // function validateEmail(email) {
