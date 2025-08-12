@@ -5,9 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Авторизация и регистрация</title>
     <script src="./scripts/registration.js" defer type="module"></script>
-    <script src="./scripts/reset_password.js" defer></script>
-    <link rel="stylesheet" href="/css/style-registration.css" />
     <!-- забыл пароль -->
+    <script src="./scripts/reset_password.js" type="module" defer></script>
+    <link rel="stylesheet" href="/css/style-registration.css" />
+
     <!-- Подключаем библиотеку International Telephone Input -->
     <link
       rel="stylesheet"
@@ -39,8 +40,8 @@
 
         <!-- Табы авторизации/регистрации -->
         <div class="auth-tabs">
-          <div class="auth-tab active" data-tab="login">Вход</div>
-          <div class="auth-tab" data-tab="register">Регистрация</div>
+          <div class="auth-tab active" data-tab="login" id="buttonLogin">Вход</div>
+          <div class="auth-tab" data-tab="register" id="buttonegister">Регистрация</div>
         </div>
 
         <!-- Форма входа -->
@@ -106,14 +107,10 @@
               Некорректный адрес электронной почты!
             </div>
           </div>
-          <button
-            type="button"
-            class="btn btn-primary"
-            onclick="sendResetPassword()"
-          >
+          <button type="button" class="btn btn-primary" id="reset-password-btn">
             Отправить
           </button>
-          <button type="button" class="btn btn-link" onclick="showLoginForm()">
+          <button type="button" class="btn btn-link" id="showLoginForm">
             Вернуться назад
           </button>
         </div>

@@ -1,4 +1,6 @@
 import { initTabSwitcher } from "./reg-script/tabSwitcher.js";
+import { hidePasswordFormRegister } from "./reg-script/tabSwitcher.js";
+import { hidePasswordFormLogin } from "./reg-script/tabSwitcher.js";
 import { initLoginForm } from "./reg-script/loginForm.js";
 import { initRegisterForm } from "./reg-script/registerForm.js";
 import { initSocialAuth } from "./reg-script/socialAuth.js";
@@ -15,4 +17,6 @@ document.addEventListener("DOMContentLoaded", () => {
   initSocialAuth();
   initForgotPassword();
   initVideoSpeed(); // Инициализируем контроль скорости видео
+  hidePasswordFormRegister(); //выключение формы восстановления пароля при нажатии кнопки регистрация
+  hidePasswordFormLogin(); //выключение формы восстановления пароля при нажатии кнопки Вход
 });

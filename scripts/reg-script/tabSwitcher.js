@@ -13,3 +13,23 @@ export function initTabSwitcher() {
     });
   });
 }
+export function hidePasswordFormRegister() {
+  const buttonRegister = document.getElementById("buttonRegister");
+  const resetPasswordForm = document.getElementById("reset-password-form");
+
+  buttonRegister.addEventListener("click", () => {
+    resetPasswordForm.style.display = "none";
+  });
+}
+hidePasswordFormRegister();
+hidePasswordFormLogin();
+
+export function hidePasswordFormLogin() {
+  const buttonLogin = document.getElementById("buttonLogin");
+  const resetPasswordForm = document.getElementById("reset-password-form");
+
+  buttonLogin.addEventListener("click", () => {
+    resetPasswordForm.style.display = "none";
+  });
+}
+
