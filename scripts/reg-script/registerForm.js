@@ -115,7 +115,9 @@ export function initRegisterForm() {
       };
 
       console.log("Данные для регистрации:", formData);
+      ////сюда вставить отправку формы на обработчик
       alert("Регистрация прошла успешно!");
+      window.location.href = "index.html";
     }
   });
 }
