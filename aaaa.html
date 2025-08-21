@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Header Example</title>
+    <style>
+      /* Общие стили */
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background-color: #fafafa;
+}
+
+.header-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1em;
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.navigation-bar a,
+.navigation-bar button {
+    color: #333;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.navigation-bar a:hover,
+.navigation-bar button:hover {
+    color: black;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.md\:flex {
+    @media screen and (min-width: 768px) { /* медиазапросы для устройств шириной >= 768 пикселей */
+        display: flex !important;
+    }
+}
+
+@media screen and (max-width: 767px) {
+    .navigation-bar {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        z-index: 100;
+        background-color: white;
+        transform: translateY(-100%); /* спрятан по умолчанию */
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease-in-out;
+    }
+
+    .navigation-bar.active {
+        transform: translateY(0);
+        opacity: 1;
+        visibility: visible;
+    }
+}
+
+.button-language {
+    padding: 0.5em 1em;
+    border-radius: 4px;
+    outline: none;
+    transition: background-color 0.3s ease;
+}
+
+.button-language:focus-within {
+    background-color: lightblue;
+}
+
+.profile-button img {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.flex-gap {
+    gap: 10px;
+}
+
+/* Дополнительные классы и переходы */
+.transition-transform {
+    transition: transform 0.3s cubic-bezier(.4,.0,.2,1), opacity 0.3s linear;
+}
+
+.hover-text {
+    &:hover {
+        color: blue;
+    }
+}
+
+.text-primary {
+    color: var(--color-primary);
+}
+
+.bg-primary {
+    background-color: var(--color-primary);
+}
+
+.p-4 {
+    padding: 1rem;
+}
+
+.m-auto {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Добавьте любые дополнительные стили ниже */
+    </style>
+    <!-- Подключение стилей
+    <link rel="stylesheet" href="styles.css"> -->
+</head>
+<body>
+    <header class="header-container">
+        <nav class="navigation-bar hidden items-center gap-1 md:flex">
+            <div class="relative">
+                <button class="flex items-center gap-1 px-3 py-2 font-medium text-foreground/80 text-sm whitespace-nowrap hover:text-foreground transition-colors">
+                    Инструменты
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down h-3 w-3 transition-transform duration-200">
+                        <path d="m6 9 6 6 6-6"/>
+                    </svg>
+                </button>
+            </div>
+            <a class="block px-3 py-2 font-medium text-foreground/80 text-sm whitespace-nowrap hover:text-foreground transition-colors" href="/ru/ai-music-generator">Создать песню</a>
+            <a class="block px-3 py-2 font-medium text-foreground/80 text-sm whitespace-nowrap hover:text-foreground transition-colors" href="/ru/ai-vocal-remover">Удаление Вокала</a>
+            <a class="block px-3 py-2 font-medium text-foreground/80 text-sm whitespace-nowrap hover:text-foreground transition-colors" href="/ru/blog">Блог</a>
+            <a class="block px-3 py-2 font-medium text-foreground/80 text-sm whitespace-nowrap hover:text-foreground transition-colors" href="/ru/pricing">Цены</a>
+            <a class="block px-3 py-2 font-medium text-foreground/80 text-sm whitespace-nowrap hover:text-foreground transition-colors" href="/ru/contact">Контакт</a>
+        </nav>
+        
+        <div class="flex items-center gap-3">
+            <button class="flex items-center justify-center font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-50 border border-secondary/15 bg-transparent text-secondary hover:bg-secondary/10 h-10 rounded-lg text-sm gap-2 hitespace-nowrap min-w-[40px] md:min-w-36 px-2 md:px-3" type="button" id="radix-:r0:" aria-haspopup="menu" aria-expanded="false" data-state="closed">
+                🇷🇺
+                <span class="hidden md:inline">Русский</span>
+            </button>
+            
+            <button class="flex items-center justify-center font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-50 border border-secondary/15 bg-transparent text-secondary hover:bg-secondary/10 size-10 rounded-lg md:hidden" aria-label="Menu" type="button" aria-haspopup="dialog" aria-expanded="false" aria-controls="radix-:r2:" data-state="closed">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-menu size-4">
+                    <line x1="4" x2="20" y1="12" y2="12"/>
+                    <line x1="4" x2="20" y1="6" y2="6"/>
+                    <line x1="4" x2="20" y1="18" y2="18"/>
+                </svg>
+            </button>
+            
+            <div class="flex items-center gap-2">
+                <div class="relative">
+                    <button class="flex items-center gap-2 rounded-lg border border-border/40 bg-background/95 md:px-3 px-2 py-2 hover:bg-accent transition-colors duration-200">
+                        <div class="flex items-center gap-2">
+                            <div class="flex-shrink-0">
+                                <img alt="gera.nikitin1996@gmail.com" class="md:h-8 md:w-8 rounded-full object-cover w-5 h-5" src="https://lh3.googleusercontent.com/a/ACg8ocKcn_6bCfZoc6jg1t2v0_eA9EV8tCOY1FUa3uxQbpQDtGZLUcs=s96-c" style="aspect-ratio: 1 / 1;"/>
+                            </div>
+                            <span class="hidden md:block text-sm font-medium">gera.nikitin1996@gmail.com</span>
+                        </div>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down h-4 w-4 transition-transform duration-200">
+                            <path d="m6 9 6 6 6-6"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <!-- Скрипты -->
+    <script src="scripts.js"></script>
+</body>
+</html>
