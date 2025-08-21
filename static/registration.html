@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Авторизация и регистрация</title>
+    <script src="./scripts/registration.js" defer type="module"></script>
+    <script src="./scripts/reset_password.js" defer></script>
+    <link rel="stylesheet" href="/css/style-registration.css" />
+    <!-- забыл пароль -->
+    <!-- Подключаем библиотеку International Telephone Input -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
+  </head>
+  <body>
+    <!-- Видео фон -->
+    <video id="bg-video" autoplay loop muted>
+      <source src="./media/video.mp4" type="video/mp4" />
+    </video>
+
+    <!-- Основной контейнер -->
+    <div class="auth-container">
+      <div class="auth-card">
+        <div class="auth-header">
+          <div class="content">
+            <img
+              src="./media/LOGO2.png"
+              width="380"
+              height="121"
+              alt="Описание изображения"
+              class="logo"
+            />
+            <p>Войдите или зарегистрируйтесь, чтобы продолжить</p>
+          </div>
+        </div>
+
+        <!-- Табы авторизации/регистрации -->
+        <div class="auth-tabs">
+          <div class="auth-tab active" data-tab="login">Вход</div>
+          <div class="auth-tab" data-tab="register">Регистрация</div>
+        </div>
+
+        <!-- Форма входа -->
+        <form id="login-form" class="auth-form active">
+          <div class="form-group">
+            <label for="login-email">eMail</label>
+            <input
+              type="text"
+              id="login-email"
+              class="form-control"
+              placeholder="Введите ваш email"
+            />
+            <div class="invalid-feedback">
+              Пожалуйста, введите корректный email
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="login-password">Пароль</label>
+            <input
+              type="password"
+              id="login-password"
+              class="form-control"
+              placeholder="Введите ваш пароль"
+            />
+            <div class="invalid-feedback">
+              Пароль должен содержать минимум 6 символов
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary">Войти</button>
+
+          <div class="social-login">
+            <p>Или войдите через</p>
+            <div class="social-buttons">
+              <div class="social-btn" id="google-login">
+                <img src="./media/icon-google.svg" alt="Google" />
+              </div>
+              <div class="social-btn" id="yandex-login">
+                <img src="./media/icon-yandex.svg" alt="Yandex" />
+              </div>
+            </div>
+          </div>
+
+          <div class="auth-footer">
+            <a href="#" id="forgot-password">Забыли пароль?</a>
+          </div>
+        </form>
+        <!-- Форма восстановления пароля -->
+        <div id="reset-password-form" class="auth-form">
+          <h2>Восстановление пароля</h2>
+          <p>
+            Укажите вашу электронную почту, и мы отправим инструкцию по сбросу
+            пароля.
+          </p>
+          <div class="form-group">
+            <label for="reset-email">Электронная почта:</label>
+            <input
+              type="email"
+              id="reset-email"
+              class="form-control"
+              required
+            />
+            <div class="invalid-feedback">
+              Некорректный адрес электронной почты!
+            </div>
+          </div>
+          <button
+            type="button"
+            class="btn btn-primary"
+            onclick="sendResetPassword()"
+          >
+            Отправить
+          </button>
+          <button type="button" class="btn btn-link" onclick="showLoginForm()">
+            Вернуться назад
+          </button>
+        </div>
+        <!-- Форма регистрации -->
+        <form id="register-form" class="auth-form">
+          <div class="form-group">
+            <label for="register-name">Имя</label>
+            <input
+              type="text"
+              id="register-name"
+              class="form-control"
+              placeholder="Введите ваше имя"
+            />
+            <div class="invalid-feedback">Пожалуйста, введите ваше имя</div>
+          </div>
+          <div class="form-group">
+            <label for="register-email">Email</label>
+            <input
+              type="email"
+              id="register-email"
+              class="form-control"
+              placeholder="Введите ваш email"
+            />
+            <div class="invalid-feedback">
+              Пожалуйста, введите корректный email
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="register-phone">Телефон</label>
+            <div class="phone-input-container">
+              <!-- Добавленная обертка -->
+              <input
+                type="tel"
+                id="register-phone"
+                class="form-control"
+                placeholder="Введите номер телефона"
+              />
+            </div>
+            <div class="invalid-feedback">
+              Пожалуйста, введите корректный номер телефона
+            </div>
+          </div>
+
+          <!-- <div class="form-group">
+        <label for="register-phone">Телефон</label>
+        <div class="phone-input-group">
+          <select id="country-code" class="country-code-select">
+            <option value="+7">+7 (RU)</option>
+            <option value="+380">+380 (UA)</option>
+            <option value="+375">+375 (BY)</option>
+            <option value="+1">+1 (US)</option>
+            <option value="+44">+44 (UK)</option>
+            <option value="+49">+49 (DE)</option>
+            <option value="+33">+33 (FR)</option>
+            <option value="+86">+86 (CN)</option>
+          </select>
+          <input
+            type="text"
+            id="register-phone"
+            class="form-control phone-number"
+            placeholder="XXX-XXX-XX-XX"
+          />
+        </div>
+        <div class="invalid-feedback">
+          Пожалуйста, введите корректный номер телефона
+        </div>
+      </div> -->
+
+          <div class="form-group">
+            <label for="register-password">Пароль</label>
+            <input
+              type="password"
+              id="register-password"
+              class="form-control"
+              placeholder="Придумайте пароль"
+            />
+            <div class="invalid-feedback">
+              Пароль должен содержать минимум 6 символов
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="register-confirm-password">Подтвердите пароль</label>
+            <input
+              type="password"
+              id="register-confirm-password"
+              class="form-control"
+              placeholder="Повторите пароль"
+            />
+            <div class="invalid-feedback">Пароли не совпадают</div>
+          </div>
+          <button type="submit" class="btn btn-primary">
+            Зарегистрироваться
+          </button>
+
+          <div class="social-login">
+            <p>Или зарегистрируйтесь через</p>
+            <div class="social-buttons">
+              <div class="social-btn" id="google-register">
+                <img src="./media/icon-google.svg" alt="Google" />
+              </div>
+              <div class="social-btn" id="yandex-register">
+                <img src="./media/icon-yandex.svg" alt="Yandex" />
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </body>
+</html>
