@@ -9,7 +9,8 @@ members = [".", "entity"]
 
 [dependencies]
 entity = { path = "entity" }
-
+uuid = { version = "1.0", features = ["v4"] }
+chrono = { version = "0.4", features = ["serde"] }
 actix-web = "4.0"
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
@@ -18,3 +19,6 @@ dotenv = "0.15.0"
 actix-files = "0.6"
 lazy_static = "1.4.0 "
 sea-orm = { version = "1.1.0", features = [ "sqlx-postgres", "runtime-tokio-rustls", "macros" ] }
+sha256 = "1.6.0"
+jsonwebtoken = "9.3.1"
+actix-web-lab = "0.24.3"
