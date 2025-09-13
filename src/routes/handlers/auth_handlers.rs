@@ -10,6 +10,7 @@ use crate::utils::api_responce::ApiResponse;
 use crate::utils::jwt::encode_jwt;
 use crate::utils::{api_responce, app_state};
 use sea_orm::{ActiveModelTrait, Condition, ColumnTrait, EntityTrait, QueryFilter, Set};
+use crate::repositories::user_repository::UserRepository;
 
 #[derive(Debug, Serialize, Deserialize)]
 struct RegisterModel {
@@ -25,22 +26,41 @@ struct LoginModel{
 }
 
 #[post("/register")]
-pub async fn register(app_state: web::Data<app_state::AppState>, register_json: web::Json<RegisterModel>) -> Result<ApiResponse,ApiResponse> {
+pub async fn register(
+    app_state: web::Data<app_state::AppState>,
+    register_json: web::Json<RegisterModel>
+) -> impl Responder {
+    
+    // Проверка существования email
+    if UserRepository::user_exists_by_email(&app_state.db, &register_json.email).await.unwrap_or(false) {
+        return ApiResponse::new(409, "Мыло уже существует чувак".to_string());
+    }
+    
+    // Проверка существования login
+    if UserRepository::user_exists_by_login(&app_state.db, &register_json.login).await.unwrap_or(false) {
+        return ApiResponse::new(409, "Твой логин уже поюзали".to_string());
+    }
+    
+    // Остальной код регистрации...
+    let hashed_password = digest(&register_json.password);
     
     let user_model = entity::logins::ActiveModel {
         login: Set(register_json.login.clone()),
         email: Set(register_json.email.clone()),
-        pass: Set(digest(&register_json.password)),
+        pass: Set(hashed_password),
         phone_number: Set(register_json.phone_number),
         create_date: Set(Utc::now().naive_utc()),
         modifate_date: Set(None),
         ..Default::default()
-    }.insert(&app_state.db).await
-    .map_err(|err| ApiResponse::new(500, err.to_string()))?;
+    }.insert(&app_state.db).await;
 
-Ok(api_responce::ApiResponse::new(200, format!("{}", user_model.id)))
-
-
+    match user_model {
+        Ok(user) => ApiResponse::new(200, format!("User created with ID: {}", user.id)),
+        Err(e) => {
+            eprintln!("Database error: {}", e);
+            ApiResponse::new(500, format!("Database error: {}", e))
+        }
+    }
 }
 
 #[post("/login")]

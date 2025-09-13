@@ -5,6 +5,7 @@ use crate::utils::app_state::AppState;
 
 mod utils;
 mod routes;
+mod repositories;
 
 #[derive(Debug)]
 struct MainError {
@@ -17,7 +18,7 @@ impl fmt::Display for MainError {
     }
 }
 
-// ✅ Простая реализация Error без устаревших методов
+
 impl std::error::Error for MainError {}
 
 #[actix_web::main] // or #[tokio::main]
