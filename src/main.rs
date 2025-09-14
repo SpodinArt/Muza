@@ -1,7 +1,11 @@
-use actix_web::{middleware::Logger, web, App, HttpServer};
+use actix_web::{middleware::Logger, web, App, HttpResponse, HttpServer};
 use sea_orm::{Database, DatabaseConnection};
 use std::fmt;
 use crate::utils::app_state::AppState;
+use actix_files::Files;
+
+
+
 
 mod utils;
 mod routes;
@@ -39,11 +43,20 @@ async fn main() -> Result<(), MainError> {
 
     HttpServer::new(move || {
         App::new()
+                .service(Files::new("/css", "./static/css"))
+        .service(Files::new("/images", "./static/images"))
+        .service(Files::new("/scripts", "./static/scripts"))
+        .service(Files::new("/media", "./static/media"))
+        .service(Files::new("/fronts", "./static/fronts"))
+        .service(Files::new("/", "./static").index_file("guest.html"))
+
         .app_data(web::Data::new(AppState{db:db.clone()}))
         .wrap(Logger::default())
         .configure(routes::home_routers::config)
         .configure(routes::auth_routes::config)
         .configure(routes::user_routes::config)
+
+
     })
     .bind((address, port))
     .map_err(|err| MainError {message: err.to_string()})?
