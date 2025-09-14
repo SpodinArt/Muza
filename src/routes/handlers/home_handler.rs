@@ -46,6 +46,16 @@ pub async fn guest_root() -> Result<HttpResponse, ApiResponse> {
 }
 
 
+#[get("/registration")]
+pub async fn registration_page() -> Result<HttpResponse, ApiResponse> {
+    let content = std::fs::read_to_string("static/registration.html")
+        .map_err(|_| ApiResponse::new(500, "Failed to read registration.html".to_string()))?;
+    
+    Ok(HttpResponse::Ok()
+        .content_type("text/html; charset=utf-8")
+        .body(content))
+}
+
 #[get("/test")]
 pub async fn test(app_state: web::Data<AppState>) -> Result<ApiResponse,ApiResponse> {
 

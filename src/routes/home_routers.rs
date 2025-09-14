@@ -9,6 +9,7 @@ pub fn config(config: &mut web::ServiceConfig){
     .service(web::scope("")
     .service(handlers::home_handler::guest_root)
     .service(handlers::home_handler::guest_page)
+    .service(handlers::home_handler::registration_page)
 )
     ;
 }
