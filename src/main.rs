@@ -55,6 +55,10 @@ async fn main() -> Result<(), MainError> {
         .configure(routes::home_routers::config)
         .configure(routes::auth_routes::config)
         .configure(routes::user_routes::config)
+        .configure(routes::user_routes::config)
+
+
+
 
 
     })
