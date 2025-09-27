@@ -1,8 +1,5 @@
-use std::default;
-use std::ptr::dangling;
 use chrono::Utc;
 use sha256::digest;
-use uuid::Uuid;
 use actix_web::{post, web, Responder};
 use serde::Deserialize;
 use serde::Serialize;

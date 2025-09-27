@@ -1,7 +1,6 @@
 use actix_web::{body::MessageBody, dev::{ServiceRequest, ServiceResponse}, http::header::AUTHORIZATION, middleware::Next, Error};
-use sea_orm::sea_query::token;
 
-use crate::utils::{api_responce::{self, ApiResponse}, jwt::decode_jwt};
+use crate::utils::{api_responce::{ ApiResponse}, jwt::decode_jwt};
 
 pub async fn check_auth_middleware(
     req: ServiceRequest,
