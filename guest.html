@@ -5,8 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Muza - твое вдохновение</title>
     <script src="./scripts/guest.js" defer type="module"></script>
+
+    <script src="./scripts/cookies/run-cookies.js" defer type="module"></script>
+
     <link rel="stylesheet" href="/css/common.css" />
     <link rel="stylesheet" href="/css/style-guest.css" />
+    <link rel="stylesheet" href="/css/cookies.css" />
   </head>
   <body>
     <video autoplay muted loop id="bg-video">
@@ -40,6 +44,79 @@
         <a href="registration" class="cta-button cta-button--guest">
           Попробуйте бесплатно
         </a>
+      </div>
+    </div>
+    <!-- Баннер уведомления о cookies -->
+    <div id="cookieNotification" class="cookie-notification">
+      <div class="cookie-text">
+        <p>
+          Мы используем файлы cookie для улучшения работы сайта. Некоторые из
+          них являются обязательными для работы сайта, а другие помогают нам
+          улучшить ваш опыт. Вы можете настроить свои предпочтения, нажав
+          "Настройки". Подробнее в нашей
+          <a href="/privacy-policy" target="_blank">
+            Политике конфиденциальности
+          </a>
+          .
+        </p>
+      </div>
+      <div class="cookie-buttons">
+        <button id="cookieSettings" class="cookie-button secondary">
+          Настройки
+        </button>
+        <button id="cookieAccept" class="cookie-button">Принять все</button>
+      </div>
+    </div>
+
+    <!-- Модальное окно настроек cookies -->
+    <div id="cookieModal" class="cookie-modal">
+      <div class="modal-content">
+        <h3>Настройки файлов cookie</h3>
+        <p>
+          Вы можете выбрать, какие файлы cookie разрешить. Обязательные файлы
+          cookie необходимы для правильной работы сайта и не могут быть
+          отключены.
+        </p>
+        <div class="cookie-options">
+          <div class="cookie-option">
+            <label>
+              <input type="checkbox" name="necessary" checked disabled />
+              <span class="checkmark"></span>
+              Обязательные
+            </label>
+            <p>
+              Эти файлы cookie необходимы для работы сайта и не могут быть
+              отключены.
+            </p>
+          </div>
+          <div class="cookie-option">
+            <label>
+              <input type="checkbox" name="analytics" />
+              <span class="checkmark"></span>
+              Аналитические
+            </label>
+            <p>
+              Эти файлы cookie позволяют нам анализировать использование сайта и
+              улучшать его производительность.
+            </p>
+          </div>
+          <div class="cookie-option">
+            <label>
+              <input type="checkbox" name="marketing" />
+              <span class="checkmark"></span>
+              Маркетинговые
+            </label>
+            <p>
+              Эти файлы cookie используются для отслеживания посетителей на
+              сайтах с целью показа рекламы.
+            </p>
+          </div>
+        </div>
+        <div class="modal-buttons">
+          <button id="saveSettings" class="cookie-button">
+            Сохранить настройки
+          </button>
+        </div>
       </div>
     </div>
   </body>
