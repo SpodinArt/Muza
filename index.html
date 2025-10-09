@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Muza</title>
+    <script src="notTab.js" defer></script>
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="/css/common.css" />
+  </head>
+  <body>
+    <div class="container">
+      <h1>Создание нот и табулатур</h1>
+
+      <div class="option-buttons">
+        <button class="option-btn" id="create-notes">Создать ноты</button>
+        <button class="option-btn" id="create-tabs">Создать табулатуру</button>
+      </div>
+
+      <div class="settings">
+        <div class="setting-group">
+          <label for="instrument">Выбор инструмента</label>
+          <select id="instrument">
+            <option value="guitar">Гитара</option>
+            <option value="piano">Фортепиано</option>
+            <option value="bass">Бас-гитара</option>
+            <option value="violin">Скрипка</option>
+          </select>
+        </div>
+
+        <div class="setting-group">
+          <label>Выберите сложность партии</label>
+          <div class="difficulty-buttons">
+            <div class="difficulty-btn active">Easy</div>
+            <div class="difficulty-btn">Medium</div>
+            <div class="difficulty-btn">Hard</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="upload-section">
+        <p>Загрузите или запишите звук</p>
+        <button class="upload-btn" id="upload-btn">
+          Выбрать файл / записать звук
+        </button>
+        <input
+          type="file"
+          id="file-input"
+          accept=".mp3,.wav"
+          style="display: none"
+        />
+
+        <div class="progress-container" id="progress-container">
+          <p>Идет загрузка...</p>
+          <progress id="upload-progress" value="0" max="100"></progress>
+        </div>
+      </div>
+
+      <div class="result-section" id="result-section">
+        <h2>Результат обработки</h2>
+        <div id="result-content">
+          <!-- Здесь будет отображаться результат (ноты или табулатура) -->
+        </div>
+
+        <div class="edit-options">
+          <label for="key-change">Изменить тональность:</label>
+          <select id="key-change">
+            <option value="original">Оригинальная</option>
+            <option value="+1">+1 полутон</option>
+            <option value="-1">-1 полутон</option>
+            <option value="+2">+2 полутона</option>
+            <option value="-2">-2 полутона</option>
+          </select>
+
+          <button class="option-btn" id="regenerate-btn">
+            Перегенерировать
+          </button>
+        </div>
+
+        <button class="save-btn" id="save-btn">Скачать результат</button>
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,4 +1,5 @@
 import { validateEmail, validatePassword } from "./validation.js";
+import { initLoginRequest } from "../requests/initLoginRequest.js";
 
 export function initLoginForm() {
   const loginForm = document.getElementById("login-form");
@@ -31,7 +32,11 @@ export function initLoginForm() {
     }
 
     if (isValid) {
-      alert("Вход выполнен успешно!");
+      //проверка аутинтификации сервером
+      // Работа с бэкендом
+     initLoginRequest(email.value, password.value);
+
+     
     }
   });
 }
