@@ -1,8 +1,10 @@
-use actix_web::{middleware::Logger, web, App, HttpResponse, HttpServer};
+use actix_web::{middleware::Logger, web, App, HttpResponse, HttpServer, middleware, http};
+use actix_web::error::{ErrorNotFound, ErrorInternalServerError};
 use sea_orm::{Database, DatabaseConnection};
 use std::fmt;
 use crate::utils::app_state::AppState;
 use actix_files::Files;
+use crate::routes::handlers::home_handler;
 
 
 
@@ -49,17 +51,19 @@ async fn main() -> Result<(), MainError> {
         .service(Files::new("/media", "./static/media"))
         .service(Files::new("/fronts", "./static/fronts"))
  
-
+        
         .app_data(web::Data::new(AppState{db:db.clone()}))
+
+        
         .wrap(Logger::default())
+        .default_service(web::route().to(home_handler::handle_404))
+
+
+
         .configure(routes::music_routes::config)
         .configure(routes::auth_routes::config)
         .configure(routes::home_routers::config)
         .configure(routes::user_routes::config)
-
-
-
-
 
 
     })

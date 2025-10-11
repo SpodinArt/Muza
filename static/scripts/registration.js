@@ -15,4 +15,5 @@ document.addEventListener("DOMContentLoaded", () => {
   initSocialAuth();
   initForgotPassword();
   initVideoSpeed(); // Инициализируем контроль скорости видео
+
 });

@@ -1,0 +1,5 @@
+.header {
+  padding: 1rem; /* Внутренний отступ */
+  margin-bottom: 1rem; /* Нижний внешний отступ */
+  border-bottom: 1px solid #dee2e6; /* Нижняя граница */
+}
