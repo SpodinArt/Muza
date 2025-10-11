@@ -53,8 +53,8 @@ async fn main() -> Result<(), MainError> {
         .app_data(web::Data::new(AppState{db:db.clone()}))
         .wrap(Logger::default())
         .configure(routes::music_routes::config)
-        .configure(routes::home_routers::config)
         .configure(routes::auth_routes::config)
+        .configure(routes::home_routers::config)
         .configure(routes::user_routes::config)
 
 
