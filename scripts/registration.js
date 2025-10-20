@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initLoginForm();
   initRegisterForm();
   initSocialAuth();
-  initForgotPassword();
+  initForgotPassword();//забыл пароль на старнице
   initVideoSpeed(); // Инициализируем контроль скорости видео
 
 });
