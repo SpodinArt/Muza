@@ -49,7 +49,7 @@ async fn main() -> Result<(), MainError> {
         .service(Files::new("/images", "./static/images"))
         .service(Files::new("/scripts", "./static/scripts"))
         .service(Files::new("/media", "./static/media"))
-        .service(Files::new("/fronts", "./static/fronts"))
+        .service(Files::new("/fonts", "./static/fonts")) // изменил название добавить в коммит
  
         
         .app_data(web::Data::new(AppState{db:db.clone()}))

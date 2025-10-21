@@ -32,3 +32,6 @@ tempfile = "3.0"
 symphonia = { version = "0.5.4", features = ["mp3", "aac", "flac", "wav"] }
 rubato = "0.16.2"
 actix-multipart = "0.7.2"
+lettre = "0.11.19"
+lettre_email = "0.9.4"
+native-tls = "0.2"
