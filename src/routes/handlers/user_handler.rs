@@ -1,3 +1,6 @@
+//! Здесь ничего нет 
+
+
 use actix_web::{get, post, web, Responder};
 use crate::utils::{api_responce, app_state};
 

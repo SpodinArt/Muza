@@ -1,3 +1,5 @@
+//! Обработчик ошибок 
+
 use actix_web::{body::BoxBody, http::StatusCode, web, HttpResponse, Responder, ResponseError};
 use std::fmt;
 

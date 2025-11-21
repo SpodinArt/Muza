@@ -9,3 +9,4 @@ pub mod personalaccount;
 pub mod shellmusic;
 pub mod tabs;
 pub mod transposition;
+pub mod password_resets;

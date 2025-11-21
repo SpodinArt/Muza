@@ -3,6 +3,7 @@ import {
   validatePhoneNumber,
   getPhoneInputInstance,
 } from "./validTelNumberRegistration.js";
+import { initRegisterRequest } from "../requests/initRegisterRequest.js";
 
 export function initRegisterForm() {
   const registerForm = document.getElementById("register-form");
@@ -113,11 +114,11 @@ export function initRegisterForm() {
         phone: fullPhone,
         password: password ? password.value : "",
       };
-
       console.log("Данные для регистрации:", formData);
+
       ////сюда вставить отправку формы на обработчик
-      alert("Регистрация прошла успешно!");
-      window.location.href = "index.html";
+      initRegisterRequest(formData.name, formData.email, formData.password, formData.phone);//Отправка регистрации на бэк
+     
     }
   });
 }

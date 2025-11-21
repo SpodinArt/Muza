@@ -1,3 +1,11 @@
+//!
+//! В этом модуле хранятся api для создания пользователя в системе: register и его структура RegisterModel
+//! 
+//! Эндпоинт входа login и его структура: LoginModel
+//! 
+//! А так же пока не реализованные эндпоинты отправки на мыло кода и смены пароля.
+//!
+use rand::Rng;
 use chrono::Utc;
 use sha256::digest;
 use actix_web::{post, web, Responder};
@@ -5,6 +13,7 @@ use serde::Deserialize;
 use serde::Serialize;
 use crate::utils::api_responce::ApiResponse;
 use crate::utils::jwt::encode_jwt;
+use crate::utils::mailer::smtp_full_server;
 use crate::utils::{api_responce, app_state};
 use sea_orm::{ActiveModelTrait, Condition, ColumnTrait, EntityTrait, QueryFilter, Set};
 use crate::repositories::user_repository::UserRepository;
@@ -23,22 +32,16 @@ struct LoginModel{
 }
 
 #[derive(Debug, Serialize, Deserialize)]
-struct ChangePasswordModel {
-    email: String,
-    old_password: String,
-    new_password: String,
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-struct ForgotPasswordModel {
-    email: String,
+struct PasswordResetRequest{
+    email:String,
 }
 
 #[post("/register")]
 pub async fn register(
     app_state: web::Data<app_state::AppState>,
     register_json: web::Json<RegisterModel>
-) -> Result<ApiResponse, ApiResponse> {  // ← Изменить на Result
+) -> Result<ApiResponse, ApiResponse> {  
+
     
     // Проверка существования email
     if UserRepository::user_exists_by_email(&app_state.db, &register_json.email).await.unwrap_or(false) {
@@ -92,56 +95,70 @@ pub async fn login(app_state: web::Data<app_state::AppState>, login_json: web::J
 
     let token = encode_jwt(user_data.email, user_data.id as i32)
     .map_err(|err| ApiResponse::new(500, err.to_string()))?;
-
+        if let Err(e) = email().await {
+        eprintln!("Ошибка отправки email: {}", e);
+        // Логируем, но не прерываем логин
+    }
 
     Ok(api_responce::ApiResponse::new(200, format!("{{\"token\": \"{}\"}}", token)))
 }
-#[post("/change-password")] // изменение пароля
-pub async fn change_password(
-    app_state: web::Data<app_state::AppState>,
-    password_json: web::Json<ChangePasswordModel>
-) -> Result<ApiResponse, ApiResponse> {
-    
-    // Находим пользователя по email
-    let user_data = entity::logins::Entity::find()
-        .filter(entity::logins::Column::Email.eq(&password_json.email))
-        .one(&app_state.db).await
-        .map_err(|err| ApiResponse::new(500, err.to_string()))?
-        .ok_or(ApiResponse::new(404, "Пользователь с таким email не найден".to_owned()))?;
 
-    // Проверяем старый пароль
-    let hashed_old_password = digest(&password_json.old_password);
-    if user_data.pass != hashed_old_password {
-        return Err(ApiResponse::new(401, "Неверный старый пароль".to_string()));
-    }
-
-    // Хешируем новый пароль
-    let hashed_new_password = digest(&password_json.new_password);
-
-    // Обновляем пароль в базе данных
-    let mut user_model: entity::logins::ActiveModel = user_data.into();
-    user_model.pass = Set(hashed_new_password);
-    user_model.modifate_date = Set(Some(Utc::now().naive_utc()));
-
-    user_model.update(&app_state.db).await
-        .map_err(|err| ApiResponse::new(500, format!("Ошибка обновления пароля: {}", err)))?;
-
-    Ok(ApiResponse::new(200, "Пароль успешно изменен".to_string()))
+async fn email() -> Result<(), Box<dyn std::error::Error>> {
+    smtp_full_server().await?;
+    Ok(())
 }
 
-#[post("/forgot-password")] // Запрос на сброс пароля
-pub async fn forgot_password(
+
+#[post("/password_reset_request")] 
+pub async fn reqest_password_reset(
     app_state: web::Data<app_state::AppState>,
-    forgot_json: web::Json<ForgotPasswordModel>
+    reset_reqest: web::Json<PasswordResetRequest>, 
 ) -> Result<ApiResponse, ApiResponse> {
-    
-    // Проверяем существование email
-    if !UserRepository::user_exists_by_email(&app_state.db, &forgot_json.email).await
-        .map_err(|err| ApiResponse::new(500, err.to_string()))? {
-        return Err(ApiResponse::new(404, "Пользователь с таким email не найден".to_string()));
+    // Проверка пустой ли Email
+    if reset_reqest.email.trim().is_empty() {
+        return Err(ApiResponse::new(400, "Email не может быть пустым".to_string()));
     }
 
-    // Здесь можно добавить логику отправки email с ссылкой для сброса пароля
-    // Пока просто возвращаем сообщение
-    Ok(ApiResponse::new(200, "Инструкции по сбросу пароля отправлены на email".to_string()))
-}
+    // Проверка существования Email в БД
+    let user_exists = UserRepository::user_exists_by_email(
+        &app_state.db,  
+        &reset_reqest.email // 
+    ).await
+    .map_err(|err| ApiResponse::new(500, format!("Этот пользователь не существует или БД недоступна {}", err)))?;
+    
+    // Если мыла нет в системе
+    if !user_exists {
+        return Err(ApiResponse::new(404, "Пользователь не найден".to_string()));
+    }
+
+    // Создание секретного кода, ключа для смены пароля
+    let mut rng = rand::thread_rng();
+    let secret_code = rng.gen_range(100000..=999999);
+    let reset_code = secret_code.to_string(); 
+    let reset_code_string = reset_code.to_string();
+
+    // Создание записи в БД
+   let reset_record = entity::password_resets::ActiveModel {
+    email: Set(reset_reqest.email.clone()),
+    code: Set(reset_code_string.clone()),
+    create_date: Set(Utc::now().naive_utc()),
+    expires_date: Set(Utc::now().naive_utc() + chrono::Duration::minutes(15)),
+    is_used: Set(false),
+    ..Default::default()
+};
+
+let saved_record = reset_record.insert(&app_state.db)
+    .await
+    .map_err(|err| ApiResponse::new(500, format!("Ошибка сохранения кода: {}", err)))?;
+
+
+
+    let email_body = format!(
+    "Ваш код для сброса пароля: {}\n\nКод действует 15 минут. Не сообщайте его никому!",
+    reset_code_string
+);
+
+
+
+    Ok(ApiResponse::new(200, format!("Код для сброса пароля: {}", reset_code)))
+} 

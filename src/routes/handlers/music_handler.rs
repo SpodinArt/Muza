@@ -1,3 +1,6 @@
+//! Пока здесь эндпоинт фильтров, который мы решили не использовать в будущем будет обработчик
+
+
 use actix_web::{get, post, web, Responder};
 use actix_multipart::{self, form::{tempfile::TempFile, MultipartForm}, Multipart};
 use serde_json::json;

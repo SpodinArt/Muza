@@ -1,3 +1,9 @@
+//! В данном модуля хранятся первоначальные пути и обработка html файлов
+//! 
+//! /guest первая страница
+//! 
+//! что будет на crete и profile спросить у Геры
+
 use actix_web::{get, web, Responder, HttpResponse, Result as ActixResult, HttpRequest, dev::ServiceResponse, Error};
 use sea_orm::{ConnectionTrait, Statement};
 use crate::utils::{api_responce::{self, ApiResponse}, app_state::AppState};

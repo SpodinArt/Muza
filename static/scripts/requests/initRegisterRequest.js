@@ -1,15 +1,19 @@
-export function initLoginRequest(email, password) {
-  const login_json = {
+export function initRegisterRequest(name, email, password, phone) {
+ let aaa = 89887453505
+  const register_json = {
+    login: name,
     email: email,
     password: password,
+    phone_number: aaa,
+    //phone_number: phone,
   };
-
-  fetch("http://127.0.0.1:8080/auth/login", {
+console.log(register_json);
+  fetch("http://127.0.0.1:8080/auth/register", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(login_json),
+    body: JSON.stringify(register_json),
   })
     .then(async (response) => {
       console.log("отправлено");

@@ -1,3 +1,5 @@
+//! Модуль проверки наличия токена у пользователя
+
 use actix_web::{body::MessageBody, dev::{ServiceRequest, ServiceResponse}, http::header::AUTHORIZATION, middleware::Next, Error};
 
 use crate::utils::{api_responce::{ ApiResponse}, jwt::decode_jwt};

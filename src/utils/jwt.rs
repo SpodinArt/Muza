@@ -1,3 +1,5 @@
+//! Создание токена
+
 use jsonwebtoken::{decode, encode, DecodingKey, EncodingKey, Header, TokenData, Validation};
 use chrono::{Duration, Utc};
 use serde::{Deserialize, Serialize};

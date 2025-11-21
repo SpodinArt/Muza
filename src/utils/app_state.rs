@@ -1,3 +1,4 @@
+//! Проверка состояния подключения к БД
 use sea_orm::DatabaseConnection;
 
 
