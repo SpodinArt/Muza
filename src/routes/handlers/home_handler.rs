@@ -4,7 +4,7 @@
 //! 
 //! что будет на crete и profile спросить у Геры
 
-use actix_web::{get, web, Responder, HttpResponse, Result as ActixResult, HttpRequest, dev::ServiceResponse, Error};
+use actix_web::{get, web,  HttpResponse, HttpRequest, Error};
 use sea_orm::{ConnectionTrait, Statement};
 use crate::utils::{api_responce::{self, ApiResponse}, app_state::AppState};
 
@@ -51,7 +51,7 @@ pub async fn registration_page() -> Result<HttpResponse, ApiResponse> {
 #[get("/test")]
 pub async fn test(app_state: web::Data<AppState>) -> Result<ApiResponse,ApiResponse> {
 
-    let res = app_state.db.query_all(Statement::from_string(sea_orm::DatabaseBackend::Postgres, "Select * from logins")).await
+    let _res = app_state.db.query_all(Statement::from_string(sea_orm::DatabaseBackend::Postgres, "Select * from logins")).await
     .map_err(|err| ApiResponse::new(500, err.to_string()))?;
     Ok(api_responce::ApiResponse::new(200, "Test".to_string()))
 }
@@ -69,13 +69,13 @@ pub async fn create() -> Result<HttpResponse, ApiResponse> {
 }
 
 #[get("/profile")]
-pub async fn profile(name: web::Path<String>) -> Result<ApiResponse,ApiResponse> {
-        let content = std::fs::read_to_string("static/profile.html")
+pub async fn profile(_name: web::Path<String>) -> Result<ApiResponse,ApiResponse> {
+        let _content = std::fs::read_to_string("static/profile.html")
         .map_err(|_| ApiResponse::new(500, "Failed to read profile.html".to_string()))?;
     Ok(api_responce::ApiResponse::new(200, "Test".to_string()))
 }
 
-pub async fn handle_404(req: HttpRequest) -> Result<HttpResponse, Error> {
+pub async fn handle_404(_req: HttpRequest) -> Result<HttpResponse, Error> {
     let content = std::fs::read_to_string("static/error.html")
         .unwrap_or_else(|_| {
             "<html><body><h1>404 - Page Not Found</h1><p>The requested page could not be found.</p></body></html>".to_string()
@@ -86,7 +86,7 @@ pub async fn handle_404(req: HttpRequest) -> Result<HttpResponse, Error> {
         .body(content))
 }
 
-pub async fn handle_500(req: HttpRequest) -> Result<HttpResponse, Error> {
+pub async fn _handle_500(_req: HttpRequest) -> Result<HttpResponse, Error> {
     let content = std::fs::read_to_string("static/error.html")
         .unwrap_or_else(|_| {
             "<html><body><h1>500 - Internal Server Error</h1><p>Something went wrong on our end.</p></body></html>".to_string()

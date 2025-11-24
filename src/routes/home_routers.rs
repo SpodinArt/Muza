@@ -1,4 +1,4 @@
-use actix_web::{web::{self}, HttpResponse};
+use actix_web::{web::{self}};
 
 use crate::routes::handlers;
 

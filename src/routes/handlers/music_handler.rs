@@ -1,8 +1,7 @@
 //! Пока здесь эндпоинт фильтров, который мы решили не использовать в будущем будет обработчик
 
 
-use actix_web::{get, post, web, Responder};
-use actix_multipart::{self, form::{tempfile::TempFile, MultipartForm}, Multipart};
+use actix_web::{get, post, web};
 use serde_json::json;
 use serde::Deserialize;
 use crate::utils::{api_responce::{self, ApiResponse}, app_state};
@@ -26,7 +25,7 @@ pub async fn get_filters() -> Result<ApiResponse,ApiResponse>{
 
 #[post("/work/pieces")]
 pub async fn find_pieces(   
-    app_state: web::Data<app_state::AppState>,
+    _app_state: web::Data<app_state::AppState>,
     search_pieces: web::Json<SearchPieces>,) -> Result<ApiResponse,ApiResponse> {
              let result = json!({
         "message": "Функция поиска",  // 7. Сообщение для отладки

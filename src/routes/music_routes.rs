@@ -1,5 +1,5 @@
 use actix_web::web;
-use crate::routes::handlers::{self, music_handler};
+use crate::routes::handlers::{self};
 
 pub fn config(config: &mut web::ServiceConfig) {
     config.service(

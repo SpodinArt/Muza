@@ -9,10 +9,10 @@ lazy_static!{
         pub static ref SECRET: String = set_secret();   
         pub static ref PORT: u16 = set_port();   
         pub static ref SMTP_HOST: String = set_smtp_host();   
-        pub static ref SMTP_PORT: u16 = set_smtp_port();   
+        pub static ref SMTP_PORT: u16 = _set_smtp_port();   
         pub static ref SMTP_USERNAME: String = set_smtp_email();   
         pub static ref SMTP_PASSWORD: String = set_smtp_pass();   
-        pub static ref FROM_NAME: String = set_name_app();   
+        pub static ref FROM_NAME: String = _set_name_app();   
 }
 
  fn set_address() -> String {
@@ -41,7 +41,7 @@ fn set_smtp_host() -> String {
     env::var("SMTP_HOST").unwrap_or("smtp.yandex.ru".to_string())
  }
 
- fn set_smtp_port() -> u16 {
+ fn _set_smtp_port() -> u16 {
     dotenv::dotenv().ok();
     env::var("SMTP_PORT").unwrap_or("587".to_owned())
         .parse::<u16>().expect("cant parse the port")
@@ -57,7 +57,7 @@ fn set_smtp_host() -> String {
     env::var("SMTP_PASSWORD").unwrap_or("SMTP_PASSWORD".to_string())
  }
 
- fn set_name_app() -> String {
+ fn _set_name_app() -> String {
     dotenv::dotenv().ok();
     env::var("FROM_NAME").unwrap_or("Muza".to_string())
  }

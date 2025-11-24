@@ -1,17 +1,16 @@
 //! Серверный модуль собирающий все в кучу
 
-use actix_web::{middleware::Logger, web, App, HttpResponse, HttpServer, middleware, http};
-use actix_web::error::{ErrorNotFound, ErrorInternalServerError};
+use actix_web::{middleware::Logger, web, App, HttpServer};
 use sea_orm::{Database, DatabaseConnection};
 use std::fmt;
 use crate::utils::app_state::AppState;
-use crate::utils::mailer::smtp_full_server;
+
 use actix_files::Files;
 use crate::routes::handlers::home_handler;
 
 mod utils;
 mod routes;
-mod repositories;
+
 
 #[derive(Debug)]
 struct MainError {

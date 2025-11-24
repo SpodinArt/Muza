@@ -1,6 +1,6 @@
-use actix_web::{middleware::from_fn, web::{self}};
+use actix_web::{web::{self}};
 
-use crate::routes::{handlers, middlewares::{self, auth_middlewares::check_auth_middleware}};
+use crate::routes::{handlers, middlewares::{auth_middlewares::check_auth_middleware}};
 
 
 

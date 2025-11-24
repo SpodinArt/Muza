@@ -31,7 +31,7 @@ pub async fn check_auth_middleware(
     println!("Cleaned token length: {}", token.len());
 
     match decode_jwt(token) {
-        Ok(claim) => {
+        Ok(_claim) => {
             next.call(req).await.map_err(|err| {
                 Error::from(ApiResponse::new(500, err.to_string()))
             })

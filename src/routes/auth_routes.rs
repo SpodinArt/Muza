@@ -7,6 +7,6 @@ pub fn config(config: &mut web::ServiceConfig){
         web::scope("/auth")
             .service(handlers::auth_handlers::register)
             .service(handlers::auth_handlers::login)
-
+            .service(handlers::auth_handlers::send_email_internal)
     );
 }

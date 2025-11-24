@@ -5,18 +5,16 @@
 //! 
 //! А так же пока не реализованные эндпоинты отправки на мыло кода и смены пароля.
 //!
-use rand::Rng;
-use chrono::Utc;
+use chrono::{Utc, Duration};
 use sha256::digest;
-use actix_web::{post, web, Responder};
+use actix_web::{post, web};
 use serde::Deserialize;
 use serde::Serialize;
 use crate::utils::api_responce::ApiResponse;
+use crate::utils::email_exa::*;
 use crate::utils::jwt::encode_jwt;
-use crate::utils::mailer::smtp_full_server;
 use crate::utils::{api_responce, app_state};
 use sea_orm::{ActiveModelTrait, Condition, ColumnTrait, EntityTrait, QueryFilter, Set};
-use crate::repositories::user_repository::UserRepository;
 
 #[derive(Debug, Serialize, Deserialize)]
 struct RegisterModel {
@@ -44,7 +42,7 @@ pub async fn register(
 
     
     // Проверка существования email
-    if UserRepository::user_exists_by_email(&app_state.db, &register_json.email).await.unwrap_or(false) {
+    if UserRepository::user_exists_by_email_in_logis(&app_state.db, &register_json.email).await.unwrap_or(false) {
         return Err(ApiResponse::new(409, "Мыло уже существует чувак".to_string()));
     }
     
@@ -95,70 +93,70 @@ pub async fn login(app_state: web::Data<app_state::AppState>, login_json: web::J
 
     let token = encode_jwt(user_data.email, user_data.id as i32)
     .map_err(|err| ApiResponse::new(500, err.to_string()))?;
-        if let Err(e) = email().await {
-        eprintln!("Ошибка отправки email: {}", e);
-        // Логируем, но не прерываем логин
-    }
+
 
     Ok(api_responce::ApiResponse::new(200, format!("{{\"token\": \"{}\"}}", token)))
 }
 
-async fn email() -> Result<(), Box<dyn std::error::Error>> {
-    smtp_full_server().await?;
-    Ok(())
+#[post("/password_reset_request")] 
+async fn send_email_internal(email_json: web::Json<PasswordResetRequest>,
+app_state: web::Data<app_state::AppState>,
+) -> Result<(), Box<dyn std::error::Error>> {
+    use crate::utils::mailer::YandexSmtpClient;
+
+    let code = generate_code();
+
+    // Проверяем email на пустоту
+    if !null_email(&email_json.email) {
+        return Err("Поле email не может быть пустым".into());
+    }
+
+    let user_exists = UserRepository::user_exists_by_email_in_logis(
+            &app_state.db,  
+            &email_json.email 
+        ).await
+        .map_err(|err| format!("Ошибка базы данных: {}", err))?;
+   
+
+        // Если мыла нет в системе
+        if !user_exists {
+    println!("⚠️ Запрос сброса пароля для несуществующего email: {}", email_json.email);
+    return Ok(());
 }
 
+// Проверяем, есть ли уже запись для этого email
+let existing = entity::password_resets::Entity::find()
+    .filter(entity::password_resets::Column::Email.eq(&email_json.email))
+    .filter(entity::password_resets::Column::IsUsed.eq(false))
+    .one(&app_state.db).await?;
 
-#[post("/password_reset_request")] 
-pub async fn reqest_password_reset(
-    app_state: web::Data<app_state::AppState>,
-    reset_reqest: web::Json<PasswordResetRequest>, 
-) -> Result<ApiResponse, ApiResponse> {
-    // Проверка пустой ли Email
-    if reset_reqest.email.trim().is_empty() {
-        return Err(ApiResponse::new(400, "Email не может быть пустым".to_string()));
+match existing {
+    Some(mut _record) => {
+        // Обновляем существующую запись
+        let mut active_model: entity::password_resets::ActiveModel = _record.into();
+        active_model.code = Set(code.clone());
+        active_model.create_date = Set(Utc::now().naive_utc());
+        active_model.expires_date = Set(Utc::now().naive_utc() + Duration::minutes(15));
+        active_model.is_used = Set(false);
+        
+        active_model.update(&app_state.db).await?;
     }
+    None => {
+        // Создаем новую запись
+        entity::password_resets::ActiveModel {
+            email: Set(email_json.email.clone()),
+            code: Set(code.clone()),
+            create_date: Set(Utc::now().naive_utc()),
+            expires_date: Set(Utc::now().naive_utc() + Duration::minutes(15)),
+            is_used: Set(false),
+            ..Default::default()
+        }.insert(&app_state.db).await?;
+    }
+}
+    let config = crate::utils::mailer::YandexSmtpConfig::default();
+    let client = YandexSmtpClient::new(config).await?;
+    client.send_email(&email_json.email, code).await?;
+    Ok(())
 
-    // Проверка существования Email в БД
-    let user_exists = UserRepository::user_exists_by_email(
-        &app_state.db,  
-        &reset_reqest.email // 
-    ).await
-    .map_err(|err| ApiResponse::new(500, format!("Этот пользователь не существует или БД недоступна {}", err)))?;
     
-    // Если мыла нет в системе
-    if !user_exists {
-        return Err(ApiResponse::new(404, "Пользователь не найден".to_string()));
-    }
-
-    // Создание секретного кода, ключа для смены пароля
-    let mut rng = rand::thread_rng();
-    let secret_code = rng.gen_range(100000..=999999);
-    let reset_code = secret_code.to_string(); 
-    let reset_code_string = reset_code.to_string();
-
-    // Создание записи в БД
-   let reset_record = entity::password_resets::ActiveModel {
-    email: Set(reset_reqest.email.clone()),
-    code: Set(reset_code_string.clone()),
-    create_date: Set(Utc::now().naive_utc()),
-    expires_date: Set(Utc::now().naive_utc() + chrono::Duration::minutes(15)),
-    is_used: Set(false),
-    ..Default::default()
-};
-
-let saved_record = reset_record.insert(&app_state.db)
-    .await
-    .map_err(|err| ApiResponse::new(500, format!("Ошибка сохранения кода: {}", err)))?;
-
-
-
-    let email_body = format!(
-    "Ваш код для сброса пароля: {}\n\nКод действует 15 минут. Не сообщайте его никому!",
-    reset_code_string
-);
-
-
-
-    Ok(ApiResponse::new(200, format!("Код для сброса пароля: {}", reset_code)))
-} 
+}
