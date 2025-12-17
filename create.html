@@ -3,82 +3,171 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Muza</title>
-    <script src="notTab.js" defer></script>
-    <link rel="stylesheet" href="styles.css" />
-    <link rel="stylesheet" href="/css/common.css" />
+    <title>Генератор</title>
+    <link rel="stylesheet" href="/css/create.css" />
+    <link rel="stylesheet" href="./css/fonts.css" />
   </head>
   <body>
-    <div class="container">
-      <h1>Создание нот и табулатур</h1>
+    <header class="auth-header">
+      <h2>Конвертируйте вашу музыку в</h2>
+    </header>
 
-      <div class="option-buttons">
-        <button class="option-btn" id="create-notes">Создать ноты</button>
-        <button class="option-btn" id="create-tabs">Создать табулатуру</button>
+    <main class="auth-container">
+      <div class="auth-card">
+        <div class="columns">
+          <!-- Левая колонка -->
+          <section class="left-column column-common">
+            <div class="messenger-input-container">
+              <input
+                type="text"
+                class="messenger-input-field"
+                id="audioInputField"
+                placeholder="Загрузить аудиофайл или записать голос"
+                readonly
+              />
+              <button class="record-button-icon" id="recordButton">
+                <svg
+                  class="microphone-icon"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M12 1C10.34 1 9 2.34 9 4V12C9 13.66 10.34 15 12 15C13.66 15 15 13.66 15 12V4C15 2.34 13.66 1 12 1Z"
+                  />
+                  <path
+                    d="M17 12V13C17 16.31 14.31 19 11 19C7.69 19 5 16.31 5 13V12H7V13C7 15.21 8.79 17 11 17C13.21 17 15 15.21 15 13V12H17Z"
+                  />
+                  <path d="M8 21H16V23H8V21Z" />
+                </svg>
+              </button>
+              <button class="upload-button">
+                <svg
+                  class="file-icon"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M12 1C10.34 1 9 2.34 9 4V12C9 13.66 10.34 15 12 15C13.66 15 15 13.66 15 12V4C15 2.34 13.66 1 12 1Z"
+                  />
+                  <path
+                    d="M17 12V13C17 16.31 14.31 19 11 19C7.69 19 5 16.31 5 13V12H7V13C7 15.21 8.79 17 11 17C13.21 17 15 15.21 15 13V12H17Z"
+                  />
+                  <path d="M8 21H16V23H8V21Z" />
+                  <path d="M13 10L17 14L13 18V10ZM11 10V18L7 14L11 10Z" />
+                </svg>
+              </button>
+            </div>
+
+            <input
+              type="file"
+              id="uploadAudio"
+              accept="audio/*"
+              style="display: none"
+            />
+            <audio
+              id="uploadedAudioPlayer"
+              class="audio-player"
+              controls="false"
+              style="display: none"
+            ></audio>
+            <audio
+              id="recordedAudioPlayer"
+              class="audio-player"
+              controls="false"
+              style="display: none"
+            ></audio>
+            <!-- Блок выбора сложности -->
+            <div class="difficulty-selection">
+              <p>Выберите сложность партии</p>
+              <div class="radio-group-difficulty">
+                <input
+                  type="radio"
+                  id="easy"
+                  name="difficulty"
+                  value="easy"
+                  checked
+                />
+                <label for="easy" class="btn-common radio-label">
+                  Для новичка
+                </label>
+
+                <input
+                  type="radio"
+                  id="medium"
+                  name="difficulty"
+                  value="medium"
+                />
+                <label for="medium" class="btn-common radio-label">
+                  Уверенный исполнитель
+                </label>
+
+                <input type="radio" id="hard" name="difficulty" value="hard" />
+                <label for="hard" class="btn-common radio-label">Профи</label>
+              </div>
+            </div>
+
+            <!-- Блок выбора инструмента -->
+            <div class="instrument-selection">
+              <p>Выбор инструмента</p>
+              <select class="styled-select">
+                <option value="guitar">Гитара</option>
+                <option value="bass">Бас гитара</option>
+                <option value="piano">Фортепиано</option>
+                <option value="violin">Скрипка</option>
+              </select>
+            </div>
+            <!-- Блок сохранения и генерации -->
+            <div class="action-buttons">
+              <button class="btn-common">Генерировать</button>
+              <button class="btn-common">Сохранить</button>
+            </div>
+          </section>
+
+          <!-- Правая колонка -->
+
+          <section class="right-column column-common">
+            <div class="right-column">
+              <div class="tab-group">
+                <!-- Вкладка 1 -->
+                <div class="">
+                  <input type="radio" name="tab-group" id="tab-1" checked />
+                  <label for="tab-1">Табы</label>
+                </div>
+
+                <!-- Вкладка 2 -->
+                <div class="">
+                  <input type="radio" name="tab-group" id="tab-2" />
+                  <label for="tab-2">Ноты</label>
+                </div>
+
+                <!-- Вкладка 3 -->
+                <div class="">
+                  <input type="radio" name="tab-group" id="tab-3" />
+                  <label for="tab-3">Midi</label>
+                </div>
+              </div>
+            </div>
+
+            <canvas id="musicSheet" class="music-canvas"></canvas>
+            <div class="tone-buttons">
+              <button class="btn-common" onclick="increaseTone()">
+                Повысить тональность
+              </button>
+              <button class="btn-common" onclick="decreaseTone()">
+                Понизить тональность
+              </button>
+              <button class="btn-common" onclick="editNotes()">
+                Редактировать ноты
+              </button>
+            </div>
+            <button class="btn-common" onclick="regenerateNotes()">
+              Перегенерировать ноты
+            </button>
+          </section>
+        </div>
       </div>
+    </main>
 
-      <div class="settings">
-        <div class="setting-group">
-          <label for="instrument">Выбор инструмента</label>
-          <select id="instrument">
-            <option value="guitar">Гитара</option>
-            <option value="piano">Фортепиано</option>
-            <option value="bass">Бас-гитара</option>
-            <option value="violin">Скрипка</option>
-          </select>
-        </div>
-
-        <div class="setting-group">
-          <label>Выберите сложность партии</label>
-          <div class="difficulty-buttons">
-            <div class="difficulty-btn active">Easy</div>
-            <div class="difficulty-btn">Medium</div>
-            <div class="difficulty-btn">Hard</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="upload-section">
-        <p>Загрузите или запишите звук</p>
-        <button class="upload-btn" id="upload-btn">
-          Выбрать файл / записать звук
-        </button>
-        <input
-          type="file"
-          id="file-input"
-          accept=".mp3,.wav"
-          style="display: none"
-        />
-
-        <div class="progress-container" id="progress-container">
-          <p>Идет загрузка...</p>
-          <progress id="upload-progress" value="0" max="100"></progress>
-        </div>
-      </div>
-
-      <div class="result-section" id="result-section">
-        <h2>Результат обработки</h2>
-        <div id="result-content">
-          <!-- Здесь будет отображаться результат (ноты или табулатура) -->
-        </div>
-
-        <div class="edit-options">
-          <label for="key-change">Изменить тональность:</label>
-          <select id="key-change">
-            <option value="original">Оригинальная</option>
-            <option value="+1">+1 полутон</option>
-            <option value="-1">-1 полутон</option>
-            <option value="+2">+2 полутона</option>
-            <option value="-2">-2 полутона</option>
-          </select>
-
-          <button class="option-btn" id="regenerate-btn">
-            Перегенерировать
-          </button>
-        </div>
-
-        <button class="save-btn" id="save-btn">Скачать результат</button>
-      </div>
-    </div>
+    <script src="script.js"></script>
   </body>
 </html>

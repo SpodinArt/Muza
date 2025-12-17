@@ -1,0 +1,799 @@
+/* Базовые настройки */
+html,
+body {
+  height: 100%;
+  min-height: 100vh;
+  width: 100%;
+  font-family: "Comfortaa-Regular", sans-serif;
+  margin: 0;
+  padding: 0;
+  color: #ddd0bd;
+  position: relative;
+}
+
+html {
+  background-color: #56524b;
+}
+
+/* Основные компоненты */
+.auth-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 10px 5px;
+  min-height: calc(100vh - 80px);
+  box-sizing: border-box;
+}
+
+.auth-header {
+  text-align: center;
+  width: 100%;
+  margin-bottom: 15px;
+  padding: 0 10px;
+  box-sizing: border-box;
+}
+
+.auth-header h2 {
+  font-size: 56px;
+  color: #aac5d8;
+  line-height: 1.4;
+  font-weight: 100;
+  -webkit-text-stroke: 1px #d3aa58;
+  filter: drop-shadow(1px 1px 0 #d3aa58);
+  font-family: "Comfortaa-SemiBold";
+  font-weight: 600;
+  margin: 0;
+}
+
+.auth-card {
+  padding: 15px;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(15px);
+  background-color: rgba(0, 0, 0, 0.6);
+  display: grid;
+  grid-template-rows: auto 1fr;
+  gap: 15px;
+  width: 100%;
+  max-width: 1200px;
+  min-width: 280px;
+  box-sizing: border-box;
+}
+
+/* Колонки */
+.columns {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 20px;
+}
+
+.column-common {
+  padding: 15px;
+  background-color: rgba(0, 0, 0, 0.4);
+  border-radius: 10px;
+  box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.4);
+  min-height: 300px;
+  box-sizing: border-box;
+}
+
+.left-column {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 15px;
+}
+
+/* Стиль поля ввода мессенджера */
+.messenger-input-container {
+  width: 100%;
+  position: relative;
+  display: flex;
+  align-items: center;
+  background: rgba(221, 208, 189, 0.1);
+  border: 2px solid #d3aa58;
+  border-radius: 20px;
+  padding: 4px;
+  transition: all 0.3s ease;
+  min-width: 250px;
+  box-sizing: border-box;
+}
+
+.messenger-input-container:hover {
+  background: rgba(221, 208, 189, 0.15);
+  box-shadow: 0 0 10px rgba(211, 170, 88, 0.3);
+}
+
+.messenger-input-field {
+  flex: 1;
+  padding: 10px 15px;
+  background: transparent;
+  border: none;
+  color: #ddd0bd;
+  font-size: 14px;
+  font-family: "Comfortaa-Regular", sans-serif;
+  cursor: pointer;
+  outline: none;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.messenger-input-field::placeholder {
+  color: #aaa;
+}
+
+.messenger-input-field:focus {
+  cursor: text;
+}
+
+.upload-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 16px;
+  background-color: #fafafa;
+  border-radius: 4px;
+  font-size: 14px;
+  color: #383838;
+  cursor: pointer;
+}
+
+.file-icon {
+  width: 18px;
+  height: 18px;
+  margin-right: 8px;
+  fill: currentColor;
+}
+
+.record-button-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #ddd0bd, #d3aa58);
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-left: 4px;
+  flex-shrink: 0;
+}
+
+.record-button-icon:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 15px rgba(211, 170, 88, 0.5);
+}
+
+.record-button-icon.recording {
+  background: linear-gradient(135deg, #ff6b6b, #ff0000);
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.microphone-icon {
+  width: 18px;
+  height: 18px;
+  fill: #383838;
+}
+
+/* Элементы форм */
+.label-and-input {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+}
+
+.audio-player {
+  /* Изменение цвета фона */
+  background-color: #ff6347; /* Tomato красный */
+  /* Дополнительные опции */
+  border: 1px solid #333; /* Цвет границы */
+  border-radius: 8px; /* Скругление углов */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); /* Тень */
+  filter: hue-rotate(180deg); /* Поворот цветового тона */
+  filter: invert(100%);
+  --player-color: #4caf50; /* Основной цвет */
+}
+/* Кнопки */
+.btn-common {
+  display: inline-block;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s;
+  background-color: #ddd0bd;
+  color: #383838;
+  border: 2px solid #d3aa58;
+  width: 100%;
+  font-family: "Comfortaa-Regular", sans-serif;
+  box-sizing: border-box;
+}
+
+.btn-common:hover {
+  transform: scale(1.05);
+  box-shadow: 0 5px 15px rgba(211, 170, 88, 0.4);
+}
+
+.tone-buttons {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.tone-buttons button {
+  flex: 1;
+}
+
+/* Нотный стан */
+.music-canvas {
+  /* Используем aspect-ratio для поддержания соотношения сторон */
+  aspect-ratio: 1 / 1; /* Соотношение ширины к высоте соответствует формату A4 1.41*/
+  display: block;
+  margin-top: 0px;
+  margin-bottom: 15px;
+  width: 100%;
+  height: auto;
+  background-color: white;
+  /*border: 2px solid #d3aa58;
+   border-radius: 6px; */
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.file-name {
+  margin-top: 8px;
+  font-size: 12px;
+  color: #aac5d8;
+  text-align: center;
+  min-height: 16px;
+}
+
+/* Адаптация для мобильных устройств */
+@media (max-width: 1024px) {
+  .columns {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+
+  .auth-header h2 {
+    font-size: 32px;
+    -webkit-text-stroke: 0.5px #d3aa58;
+  }
+
+  .tone-buttons {
+    flex-direction: column;
+  }
+
+  .auth-card {
+    padding: 12px;
+    width: 100%;
+    margin: 5px;
+    gap: 12px;
+  }
+
+  .column-common {
+    padding: 12px;
+    min-height: 250px;
+  }
+
+  .music-canvas {
+    height: auto;
+    aspect-ratio: 1 / 1;
+  }
+
+  .auth-container {
+    padding: 8px 5px;
+    min-height: calc(100vh - 60px);
+  }
+
+  .left-column {
+    gap: 12px;
+  }
+}
+
+/* Адаптация для очень маленьких экранов (300-480px) */
+@media (max-width: 480px) {
+  .auth-header h2 {
+    font-size: 24px;
+    line-height: 1.2;
+    margin-bottom: 12px;
+    -webkit-text-stroke: 0.3px #d3aa58;
+  }
+
+  .btn-common {
+    padding: 10px 15px;
+    font-size: 12px;
+    border-radius: 18px;
+  }
+
+  .messenger-input-field {
+    padding: 8px 12px;
+    font-size: 12px;
+  }
+
+  .record-button-icon {
+    width: 35px;
+    height: 35px;
+  }
+
+  .microphone-icon {
+    width: 16px;
+    height: 16px;
+  }
+
+  .auth-card {
+    padding: 10px;
+    gap: 10px;
+    border-radius: 10px;
+  }
+
+  .column-common {
+    padding: 10px;
+    min-height: 220px;
+    border-radius: 8px;
+  }
+
+  .left-column {
+    gap: 10px;
+  }
+
+  .music-canvas {
+    margin: 10px auto;
+    height: auto;
+    aspect-ratio: 1 / 1;
+  }
+
+  .tone-buttons {
+    margin-bottom: 12px;
+    gap: 8px;
+  }
+
+  .auth-container {
+    padding: 5px;
+    align-items: flex-start;
+  }
+
+  .columns {
+    gap: 10px;
+  }
+}
+
+/* Адаптация для экстремально маленьких экранов (до 300px) */
+@media (max-width: 300px) {
+  .auth-header h2 {
+    font-size: 20px;
+    margin-bottom: 8px;
+  }
+
+  .auth-card {
+    padding: 8px;
+    gap: 8px;
+    min-width: 260px;
+  }
+
+  .column-common {
+    padding: 8px;
+    min-height: 200px;
+  }
+
+  .btn-common {
+    padding: 8px 12px;
+    font-size: 11px;
+  }
+
+  .messenger-input-container {
+    border-radius: 18px;
+    padding: 3px;
+  }
+
+  .messenger-input-field {
+    padding: 6px 10px;
+    font-size: 11px;
+  }
+
+  .record-button-icon {
+    width: 32px;
+    height: 32px;
+  }
+
+  .microphone-icon {
+    width: 14px;
+    height: 14px;
+  }
+
+  .music-canvas {
+    height: auto;
+    aspect-ratio: 1 / 1;
+  }
+
+  .auth-container {
+    padding: 3px;
+  }
+}
+
+/* Адаптация для 4K и больших экранов */
+@media (min-width: 1920px) {
+  .auth-card {
+    max-width: 1600px;
+    padding: 40px;
+  }
+
+  .auth-header h2 {
+    font-size: 72px;
+    margin-bottom: 50px;
+  }
+
+  .btn-common {
+    padding: 20px 40px;
+    font-size: 20px;
+    border-radius: 30px;
+  }
+
+  .messenger-input-field {
+    padding: 18px 25px;
+    font-size: 20px;
+  }
+
+  .record-button-icon {
+    width: 60px;
+    height: 60px;
+  }
+
+  .microphone-icon {
+    width: 28px;
+    height: 28px;
+  }
+
+  .music-canvas {
+    height: auto;
+    aspect-ratio: 1 / 1;
+  }
+
+  .column-common {
+    padding: 35px;
+    min-height: 500px;
+  }
+
+  .columns {
+    gap: 40px;
+  }
+
+  .tone-buttons {
+    margin-bottom: 35px;
+    gap: 20px;
+  }
+}
+
+/* Убираем стили для file-name */
+.file-name {
+  display: none;
+}
+
+/* Добавляем стили для вкладок */
+.tab-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 15px;
+}
+
+/* Если нужно чтобы были слева как вкладки
+
+Стили Табов генерации
+.tab-group {
+  position: relative;
+  width: 100%;
+  display: flex;
+}
+
+
+// Скрытие радио-кнопок 
+.tab-group input[type="radio"] {
+  display: none;
+}
+
+// Стили для меток вкладок 
+.tab-group label {
+  display: inline-block;
+  padding: 15px 20px;
+  margin-right: 5px;
+  border: 2px solid transparent;
+  border-bottom: none;
+  cursor: pointer;
+  font-size: 14px;
+  color: #ddd0bd;
+  background-color: rgba(0, 0, 0, 0.4);
+  border-radius: 8px 8px 0 0;
+  transition: all 0.3s ease;
+}
+
+// Активная вкладка 
+.tab-group label:hover,
+.tab-group input[type="radio"]:checked + label {
+  background-color: #ddd0bd;
+  color: #383838;
+  border-color: #d3aa58;
+  border-bottom-color: transparent;
+}
+
+// Содержимое вкладок 
+.tab-content {
+  display: none;
+  padding: 20px;
+  background-color: rgba(0, 0, 0, 0.4);
+  border: inset 0 0 15px rgba(0, 0, 0, 0.4);
+  border-radius: 0 0 10px 10px;
+  box-sizing: border-box;
+}
+
+// Показ активного контента 
+.tab-group input[type="radio"]:checked ~ .tab-content {
+  display: block;
+}
+
+/* Адаптация 
+@media (max-width: 768px) {
+  .tab-group label {
+    padding: 10px 15px;
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .tab-group label {
+    display: block;
+    width: 100%;
+    margin-bottom: 5px;
+  }
+} */
+
+/* Исправленные стили Табов генерации */
+.tab-group {
+  position: relative;
+  width: 100%;
+  display: flex; /* Только одно свойство display */
+}
+
+/* Растягиваем каждый div внутри tab-group равномерно */
+.tab-group > div {
+  flex: 1; /* Это ключевое свойство для равномерного распределения */
+  display: flex; /* Чтобы label внутри занимал всю доступную ширину */
+}
+
+/* Стили для меток вкладок */
+.tab-group label {
+  display: flex; /* Меняем inline-block на flex */
+  align-items: center; /* Выравниваем по вертикали */
+  justify-content: center; /* Выравниваем по горизонтали */
+  flex: 1; /* Растягиваем на всю ширину родителя */
+  padding: 15px 20px;
+  margin-right: 5px;
+  border: 2px solid transparent;
+  border-bottom: none;
+  cursor: pointer;
+  font-size: 14px;
+  color: #ddd0bd;
+  background-color: rgba(0, 0, 0, 0.4);
+  border-radius: 8px 8px 0 0;
+  transition: all 0.3s ease;
+  text-align: center; /* Центрируем текст */
+  min-width: 0; /* Позволяет сжиматься при недостатке места */
+}
+
+/* Убираем margin у последней вкладки */
+.tab-group > div:last-child label {
+  margin-right: 0;
+}
+
+/* Активная вкладка */
+.tab-group label:hover,
+.tab-group input[type="radio"]:checked + label {
+  background-color: #ddd0bd;
+  color: #383838;
+  border-color: #d3aa58;
+  border-bottom-color: transparent;
+}
+
+/* Скрытие радио-кнопок */
+.tab-group input[type="radio"] {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* Для визуального разделения вкладок можно добавить */
+.tab-group > div:not(:last-child) label {
+  border-right: 1px solid rgba(221, 208, 189, 0.3);
+}
+
+/* Исправляем адаптацию для мобильных устройств */
+@media (max-width: 768px) {
+  .tab-group label {
+    padding: 12px 15px;
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 480px) {
+  .tab-group {
+    flex-direction: column; /* В мобильной версии делаем вертикально */
+  }
+
+  .tab-group > div {
+    width: 100%;
+  }
+
+  .tab-group label {
+    display: block;
+    width: 100%;
+    margin-bottom: 5px;
+    margin-right: 0;
+    border-radius: 8px; /* Меняем скругление для вертикального вида */
+    border: 2px solid transparent;
+  }
+
+  /* Убираем правую границу в мобильной версии */
+  .tab-group > div:not(:last-child) label {
+    border-right: 2px solid transparent;
+    border-bottom: 1px solid rgba(221, 208, 189, 0.3);
+  }
+
+  /* Активная вкладка в мобильной версии */
+  .tab-group label:hover,
+  .tab-group input[type="radio"]:checked + label {
+    border: 2px solid #d3aa58;
+  }
+}
+
+/* Стили для выбора сложности левая колонка  */
+/* Стили для выбора сложности */
+.difficulty-selection {
+  width: 100%;
+  margin-top: 10px;
+}
+
+.difficulty-selection p {
+  color: #aac5d8;
+  text-align: center;
+  margin-bottom: 10px;
+  font-size: 14px;
+}
+
+.radio-group-difficulty {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+
+.radio-group-difficulty input[type="radio"] {
+  display: none;
+}
+
+.radio-group-difficulty .radio-label {
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.radio-group-difficulty input[type="radio"]:checked + .radio-label {
+  background-color: #d3aa58;
+  color: #383838;
+  transform: scale(1.02);
+  box-shadow: 0 3px 10px rgba(211, 170, 88, 0.5);
+}
+
+/* Стили для выбора инструмента */
+.instrument-selection {
+  width: 100%;
+  margin-top: 15px;
+}
+
+.instrument-selection p {
+  color: #aac5d8;
+  text-align: center;
+  margin-bottom: 10px;
+  font-size: 14px;
+}
+
+.styled-select {
+  width: 100%;
+  padding: 12px 20px;
+  border: 2px solid #d3aa58;
+  border-radius: 20px;
+  font-size: 14px;
+  background-color: #ddd0bd;
+  color: #383838;
+  font-family: "Comfortaa-Regular", sans-serif;
+  cursor: pointer;
+  outline: none;
+  transition: all 0.3s;
+  box-sizing: border-box;
+  text-align: center; /* Выравнивание текста по центру */
+  appearance: none; /* Убираем стандартную стрелку */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23383838' d='M6 8L2 4h8z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 15px center;
+  background-size: 12px;
+}
+
+.styled-select:hover {
+  transform: scale(1.05);
+  box-shadow: 0 5px 15px rgba(211, 170, 88, 0.4);
+}
+
+.styled-select:focus {
+  border-color: #aac5d8;
+}
+
+/* Стили для выбранного option */
+.styled-select option:checked {
+  background-color: rgb(
+    211,
+    170,
+    88
+  ); /* Золотистый цвет для выбранного элемента */
+  color: #383838;
+}
+
+.styled-select option {
+  background-color: #ddd0bd;
+  color: #383838;
+  text-align: center;
+}
+/* Стили для контейнера кнопок */
+.action-buttons {
+  width: 100%;
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: auto;
+}
+/* Адаптация для мобильных устройств */
+@media (max-width: 480px) {
+  .difficulty-selection p,
+  .instrument-selection p {
+    font-size: 12px;
+  }
+
+  .styled-select {
+    padding: 10px 15px;
+    font-size: 12px;
+    background-position: right 12px center;
+  }
+}
+
+@media (max-width: 300px) {
+  .difficulty-selection p,
+  .instrument-selection p {
+    font-size: 11px;
+  }
+
+  .styled-select {
+    padding: 8px 12px;
+    font-size: 11px;
+    background-position: right 10px center;
+  }
+}
