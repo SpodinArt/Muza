@@ -3,9 +3,8 @@
 pub use super::formatsheetmusic::Entity as Formatsheetmusic;
 pub use super::formattabs::Entity as Formattabs;
 pub use super::logins::Entity as Logins;
+pub use super::password_resets::Entity as PasswordResets;
 pub use super::personalaccount::Entity as Personalaccount;
 pub use super::shellmusic::Entity as Shellmusic;
 pub use super::tabs::Entity as Tabs;
 pub use super::transposition::Entity as Transposition;
-pub use super::password_resets::Entity as PasswordResets;
-

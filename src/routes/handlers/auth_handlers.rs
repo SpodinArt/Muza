@@ -5,7 +5,7 @@
 //! 
 //! А так же пока не реализованные эндпоинты отправки на мыло кода и смены пароля.
 //!
-use chrono::{Utc, Duration};
+use chrono::{Utc};
 use sha256::digest;
 use actix_web::{post, web};
 use serde::Deserialize;
@@ -15,6 +15,7 @@ use crate::utils::email_exa::*;
 use crate::utils::jwt::encode_jwt;
 use crate::utils::{api_responce, app_state};
 use sea_orm::{ActiveModelTrait, Condition, ColumnTrait, EntityTrait, QueryFilter, Set};
+
 
 #[derive(Debug, Serialize, Deserialize)]
 struct RegisterModel {
@@ -29,14 +30,9 @@ struct LoginModel{
     password: String
 }
 
-#[derive(Debug, Serialize, Deserialize)]
-struct PasswordResetRequest{
-    email:String,
-}
-
 #[post("/register")]
 pub async fn register(
-    app_state: web::Data<app_state::AppState>,
+    app_state: web::Data<app_state::AppState>, 
     register_json: web::Json<RegisterModel>
 ) -> Result<ApiResponse, ApiResponse> {  
 
@@ -80,7 +76,9 @@ pub async fn register(
     }
 }
 #[post("/login")]
-pub async fn login(app_state: web::Data<app_state::AppState>, login_json: web::Json<LoginModel>) -> Result<ApiResponse,ApiResponse>{
+pub async fn login(app_state: web::Data<app_state::AppState>,
+     login_json: web::Json<LoginModel>)
+      -> Result<ApiResponse,ApiResponse>{
      
     let user_data = entity::logins::Entity::find()
     .filter(
@@ -94,69 +92,14 @@ pub async fn login(app_state: web::Data<app_state::AppState>, login_json: web::J
     let token = encode_jwt(user_data.email, user_data.id as i32)
     .map_err(|err| ApiResponse::new(500, err.to_string()))?;
 
+    let user_token = entity::logins::Entity::find()
+    .filter(
+        Condition::all()
+        //.add(entity::logins::Column::Token(token.clone())) //"раскоментить когда будет готов токен в Логинах"
+    ).one(&app_state.db).await
+    .map_err(|err| ApiResponse::new(500, err.to_string()))?
+    .ok_or(ApiResponse::new(404, "Токен не записан".to_owned()))?;
+
 
     Ok(api_responce::ApiResponse::new(200, format!("{{\"token\": \"{}\"}}", token)))
-}
-
-#[post("/password_reset_request")] 
-async fn send_email_internal(email_json: web::Json<PasswordResetRequest>,
-app_state: web::Data<app_state::AppState>,
-) -> Result<(), Box<dyn std::error::Error>> {
-    use crate::utils::mailer::YandexSmtpClient;
-
-    let code = generate_code();
-
-    // Проверяем email на пустоту
-    if !null_email(&email_json.email) {
-        return Err("Поле email не может быть пустым".into());
-    }
-
-    let user_exists = UserRepository::user_exists_by_email_in_logis(
-            &app_state.db,  
-            &email_json.email 
-        ).await
-        .map_err(|err| format!("Ошибка базы данных: {}", err))?;
-   
-
-        // Если мыла нет в системе
-        if !user_exists {
-    println!("⚠️ Запрос сброса пароля для несуществующего email: {}", email_json.email);
-    return Ok(());
-}
-
-// Проверяем, есть ли уже запись для этого email
-let existing = entity::password_resets::Entity::find()
-    .filter(entity::password_resets::Column::Email.eq(&email_json.email))
-    .filter(entity::password_resets::Column::IsUsed.eq(false))
-    .one(&app_state.db).await?;
-
-match existing {
-    Some(mut _record) => {
-        // Обновляем существующую запись
-        let mut active_model: entity::password_resets::ActiveModel = _record.into();
-        active_model.code = Set(code.clone());
-        active_model.create_date = Set(Utc::now().naive_utc());
-        active_model.expires_date = Set(Utc::now().naive_utc() + Duration::minutes(15));
-        active_model.is_used = Set(false);
-        
-        active_model.update(&app_state.db).await?;
-    }
-    None => {
-        // Создаем новую запись
-        entity::password_resets::ActiveModel {
-            email: Set(email_json.email.clone()),
-            code: Set(code.clone()),
-            create_date: Set(Utc::now().naive_utc()),
-            expires_date: Set(Utc::now().naive_utc() + Duration::minutes(15)),
-            is_used: Set(false),
-            ..Default::default()
-        }.insert(&app_state.db).await?;
-    }
-}
-    let config = crate::utils::mailer::YandexSmtpConfig::default();
-    let client = YandexSmtpClient::new(config).await?;
-    client.send_email(&email_json.email, code).await?;
-    Ok(())
-
-    
 }

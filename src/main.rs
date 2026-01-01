@@ -62,7 +62,6 @@ async fn main() -> Result<(), MainError> {
         .configure(routes::music_routes::config)
         .configure(routes::auth_routes::config)
         .configure(routes::home_routers::config)
-        .configure(routes::user_routes::config)
 
 
     })

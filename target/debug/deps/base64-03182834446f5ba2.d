@@ -1,0 +1,12 @@
+C:\Prodgets\Muza\target\debug\deps\base64-03182834446f5ba2.d: C:\Users\gorua\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\base64-0.10.1\src\lib.rs C:\Users\gorua\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\base64-0.10.1\src\chunked_encoder.rs C:\Users\gorua\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\base64-0.10.1\src\display.rs C:\Users\gorua\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\base64-0.10.1\src\tables.rs C:\Users\gorua\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\base64-0.10.1\src\write\mod.rs C:\Users\gorua\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\base64-0.10.1\src\write\encoder.rs C:\Users\gorua\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\base64-0.10.1\src\encode.rs C:\Users\gorua\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\base64-0.10.1\src\decode.rs
+
+C:\Prodgets\Muza\target\debug\deps\libbase64-03182834446f5ba2.rmeta: C:\Users\gorua\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\base64-0.10.1\src\lib.rs C:\Users\gorua\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\base64-0.10.1\src\chunked_encoder.rs C:\Users\gorua\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\base64-0.10.1\src\display.rs C:\Users\gorua\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\base64-0.10.1\src\tables.rs C:\Users\gorua\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\base64-0.10.1\src\write\mod.rs C:\Users\gorua\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\base64-0.10.1\src\write\encoder.rs C:\Users\gorua\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\base64-0.10.1\src\encode.rs C:\Users\gorua\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\base64-0.10.1\src\decode.rs
+
+C:\Users\gorua\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\base64-0.10.1\src\lib.rs:
+C:\Users\gorua\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\base64-0.10.1\src\chunked_encoder.rs:
+C:\Users\gorua\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\base64-0.10.1\src\display.rs:
+C:\Users\gorua\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\base64-0.10.1\src\tables.rs:
+C:\Users\gorua\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\base64-0.10.1\src\write\mod.rs:
+C:\Users\gorua\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\base64-0.10.1\src\write\encoder.rs:
+C:\Users\gorua\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\base64-0.10.1\src\encode.rs:
+C:\Users\gorua\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\base64-0.10.1\src\decode.rs:
