@@ -3,6 +3,7 @@
 use chrono::{Utc, Duration};
 use actix_web::{post, web};
 use serde::{Deserialize, Serialize};
+use sha256::digest;
 use crate::utils::api_responce::{self, ApiResponse};
 use crate::utils::email_exa::*;
 use crate::utils::endpoints_limit::limitation_generate_code;
@@ -21,6 +22,12 @@ struct Pass_examination_code {
     code: i32,
 }
 
+#[derive(Debug, Serialize, Deserialize)]
+struct token_and_pass {
+    email: String,
+    token: String,
+    pass: String
+}
 
 #[post("/password_reset_request")] 
 async fn send_email_internal(email_json: web::Json<PasswordResetRequest>,
@@ -70,8 +77,6 @@ match existing {
         active_model.create_date = Set(Utc::now().naive_utc());
         active_model.expires_date = Set(Utc::now().naive_utc() + Duration::minutes(15));
         active_model.is_used = Set(false);
-        active_model.is_used = Set(false);
-
         active_model.update(&app_state.db).await?;
     }
     None => {
@@ -110,11 +115,45 @@ async fn pass_examination_code(app_state: web::Data<app_state::AppState>, email_
     let token = encode_jwt(user_data.email, user_data.id as i32)
     .map_err(|err| ApiResponse::new(500, err.to_string()))?;
 
-    let user_token = entity::password_resets::Entity::find()
-    .filter(Condition::all()
-    //.add(entity::password_resets::Column::Token(token.clone())) раскоментить когда будет готов токен в БД
-    ).one(&app_state.db).await
-        .map_err(|err| ApiResponse::new(500, err.to_string()))?;
+    //user_data.token = Set(token); раскомитить когда будет готов token  в pass_ress
 
     Ok(api_responce::ApiResponse::new(200, format!("{{\"token\": \"{}\"}}", token)))
 }
+
+#[post("/pass_resset")]
+async fn pass_resset(app_state: web::Data<app_state::AppState>, token_and_pass: web::Json<token_and_pass>) 
+-> Result<ApiResponse,ApiResponse> {
+
+    let mut user_ress = entity::password_resets::Entity::find()
+    .filter(
+        Condition::all()
+        .add(entity::password_resets::Column::Email.eq(&token_and_pass.email))
+        //.add(entity::password_resets::Column::Token.eq(&token_and_pass.token)) раскомитить позже
+    )
+    .one(&app_state.db).await
+        .map_err(|err| ApiResponse::new(500, err.to_string()))?
+     .ok_or(ApiResponse::new(404, "Левый токен или мыло".to_owned()))?;
+
+    let user_logins = entity::logins::Entity::find()
+    .filter(
+        Condition::all()
+        .add(entity::logins::Column::Email.eq(&user_ress.email))
+    ).one(&app_state.db).await
+        .map_err(|err| ApiResponse::new(500, err.to_string()))?
+     .ok_or(ApiResponse::new(404, "Не нашли мыло".to_owned()))?;
+
+    let mut user_logins_active: entity::logins::ActiveModel = user_logins.into();
+
+    let hashed_password = digest(&token_and_pass.pass);
+    user_logins_active.pass = Set(hashed_password);
+
+
+    user_logins_active.update(&app_state.db).await
+    .map_err(|err| ApiResponse::new(500, err.to_string()))?;
+
+    user_ress.is_used = true;
+   
+
+    Ok(api_responce::ApiResponse::new(200, format!("{{\"token\": \"{}\"}}", 123)))
+}
+

@@ -92,13 +92,7 @@ pub async fn login(app_state: web::Data<app_state::AppState>,
     let token = encode_jwt(user_data.email, user_data.id as i32)
     .map_err(|err| ApiResponse::new(500, err.to_string()))?;
 
-    let user_token = entity::logins::Entity::find()
-    .filter(
-        Condition::all()
-        //.add(entity::logins::Column::Token(token.clone())) //"раскоментить когда будет готов токен в Логинах"
-    ).one(&app_state.db).await
-    .map_err(|err| ApiResponse::new(500, err.to_string()))?
-    .ok_or(ApiResponse::new(404, "Токен не записан".to_owned()))?;
+    //user_data.token = Set(token); раскомитить когда будет готов токен в Logins
 
 
     Ok(api_responce::ApiResponse::new(200, format!("{{\"token\": \"{}\"}}", token)))

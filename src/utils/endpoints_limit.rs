@@ -21,7 +21,7 @@ pub async fn limitation_generate_code(
     {
         Ok(Some(record)) => {
 
-            now >= record.create_date + Duration::minutes(1)
+            now >= record.create_date + Duration::minutes(1) && now <= record.create_date + Duration::minutes(5)
         },
         Ok(None) => {
             eprintln!("Записи не существует");
