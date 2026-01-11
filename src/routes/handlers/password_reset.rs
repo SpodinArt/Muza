@@ -100,7 +100,8 @@ match existing {
 }
 
 #[post("/pass_examination_code")]
-async fn pass_examination_code(app_state: web::Data<app_state::AppState>, email_code: web::Json<Pass_examination_code>) -> Result<ApiResponse,ApiResponse> {
+async fn pass_examination_code(app_state: web::Data<app_state::AppState>, email_code: web::Json<Pass_examination_code>) 
+-> Result<ApiResponse,ApiResponse> {
     let user_data = entity::password_resets::Entity::find()
         .filter(
             Condition::all()
@@ -110,7 +111,7 @@ async fn pass_examination_code(app_state: web::Data<app_state::AppState>, email_
         )
         .one(&app_state.db).await
         .map_err(|err| ApiResponse::new(500, err.to_string()))?
-     .ok_or(ApiResponse::new(404, "Код потерял парень?".to_owned()))?;
+     .ok_or(ApiResponse::new(401, "Код потерял парень?".to_owned()))?;
 
     let token = encode_jwt(user_data.email, user_data.id as i32)
     .map_err(|err| ApiResponse::new(500, err.to_string()))?;

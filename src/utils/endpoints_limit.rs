@@ -25,7 +25,7 @@ pub async fn limitation_generate_code(
         },
         Ok(None) => {
             eprintln!("Записи не существует");
-            false
+            true
         },
         Err(err) => {
             eprintln!("Ошибка при проверке ограничений: {}", err);

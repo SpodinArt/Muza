@@ -59,7 +59,7 @@ impl YandexSmtpClient {
             .to(email.parse()?)
             .from(self.config.username.clone().parse()?)
             .subject("Ваш код подтверждения".to_string())
-            .body(format!("Ваш код для подтверждения: {}\n\nКод действует 15 минут. Не сообщайте его никому!", code))?;
+            .body(format!("Ваш код для подтверждения: {}\n\nКод действует 5 минут. Не сообщайте его никому!", code))?;
 
         match self.mailer.send(&message) {
             Ok(_) => {
