@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Восстановление пароля - MUZA</title>
+    <style>
+      /* Основные стили из вашего файла */
+      body {
+        font-family: "Arial", sans-serif;
+        background-color: #1a1a1a;
+        color: #ddd0bd;
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      .email-container {
+        max-width: 600px;
+        margin: 0 auto;
+        background-color: rgba(0, 0, 0, 0.7);
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+      }
+
+      .email-header {
+        background: linear-gradient(
+          135deg,
+          rgba(170, 197, 216, 0.1),
+          rgba(211, 170, 88, 0.1)
+        );
+        padding: 40px 20px;
+        text-align: center;
+        border-bottom: 1px solid #d3aa58;
+      }
+
+      .email-header h1 {
+        font-size: 32px;
+        color: #aac5d8;
+        margin: 0;
+        font-weight: 600;
+        letter-spacing: 1px;
+      }
+
+      .email-content {
+        padding: 40px;
+      }
+
+      .message {
+        font-size: 18px;
+        margin-bottom: 30px;
+        text-align: center;
+      }
+
+      .warning {
+        color: #ff6b6b;
+        font-size: 14px;
+        text-align: center;
+        margin-bottom: 40px;
+        font-weight: bold;
+        border-top: 1px solid rgba(255, 107, 107, 0.3);
+        padding-top: 20px;
+      }
+
+      /* Стили для кода восстановления - легко копировать */
+      .recovery-code-container {
+        background-color: rgba(221, 208, 189, 0.1);
+        border: 2px solid #d3aa58;
+        border-radius: 10px;
+        padding: 20px;
+        margin: 40px 0;
+        text-align: center;
+        position: relative;
+      }
+
+      .recovery-code-label {
+        font-size: 16px;
+        color: #aac5d8;
+        margin-bottom: 15px;
+        display: block;
+      }
+
+      /* Код восстановления - оптимизирован для копирования */
+      .recovery-code-wrapper {
+        display: inline-block;
+        position: relative;
+        margin: 20px auto;
+        max-width: 100%;
+      }
+
+      .recovery-code {
+        font-family: "Courier New", monospace, monospace;
+        font-size: 36px;
+        font-weight: bold;
+        color: #ddd0bd;
+        letter-spacing: 8px;
+        background-color: rgba(0, 0, 0, 0.5);
+        padding: 25px 35px;
+        border-radius: 8px;
+        border: 2px solid rgba(211, 170, 88, 0.7);
+        display: inline-block;
+        text-align: center;
+        cursor: pointer;
+        user-select: all;
+        -webkit-user-select: all;
+        -moz-user-select: all;
+        -ms-user-select: all;
+        transition: all 0.3s ease;
+        word-break: break-all;
+        overflow-wrap: break-word;
+        line-height: 1.4;
+        min-width: 250px;
+        box-sizing: border-box;
+        box-shadow: 0 4px 12px rgba(211, 170, 88, 0.2);
+      }
+
+      /* Подсветка при касании/наведении */
+      .recovery-code:hover {
+        background-color: rgba(211, 170, 88, 0.1);
+        border-color: #aac5d8;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(211, 170, 88, 0.3);
+      }
+
+      .recovery-code:active {
+        transform: translateY(0);
+        box-shadow: 0 2px 8px rgba(211, 170, 88, 0.3);
+      }
+
+      /* Индикатор копирования */
+      .copy-indicator {
+        position: absolute;
+        bottom: -30px;
+        left: 0;
+        right: 0;
+        font-size: 14px;
+        color: #aac5d8ac;
+        opacity: 0;
+        transition: opacity 0.3s;
+        pointer-events: none;
+      }
+
+      .recovery-code-wrapper:hover .copy-indicator {
+        opacity: 1;
+      }
+
+      /* Адаптивные стили для кода */
+      @media (max-width: 480px) {
+        .recovery-code {
+          font-size: 28px;
+          letter-spacing: 6px;
+          padding: 20px 25px;
+          min-width: 200px;
+        }
+
+        .recovery-code-label {
+          font-size: 14px;
+        }
+      }
+
+      @media (max-width: 360px) {
+        .recovery-code {
+          font-size: 24px;
+          letter-spacing: 4px;
+          padding: 18px 20px;
+          min-width: 180px;
+        }
+      }
+
+      /* Для очень длинных кодов */
+      .recovery-code.long-code {
+        font-size: 28px;
+        letter-spacing: 5px;
+        padding: 20px;
+      }
+
+      .instructions {
+        background-color: rgba(170, 197, 216, 0.1);
+        border-left: 4px solid #aac5d8;
+        padding: 20px;
+        margin: 30px 0;
+        font-size: 16px;
+      }
+
+      .instructions ol {
+        margin: 15px 0;
+        padding-left: 20px;
+      }
+
+      .instructions li {
+        margin-bottom: 10px;
+      }
+
+      .cta-button {
+        display: inline-block;
+        background-color: #ddd0bd;
+        color: #383838;
+        padding: 15px 40px;
+        text-decoration: none;
+        border-radius: 20px;
+        font-weight: bold;
+        font-size: 18px;
+        border: 2px solid #d3aa58;
+        transition: all 0.3s;
+        margin: 20px 0;
+        cursor: pointer;
+      }
+
+      .cta-button:hover {
+        transform: scale(1.05);
+        box-shadow: 0 5px 15px rgba(211, 170, 88, 0.3);
+      }
+
+      .email-footer {
+        text-align: center;
+        padding: 30px;
+        border-top: 1px solid rgba(211, 170, 88, 0.3);
+        margin-top: 40px;
+        font-size: 14px;
+        color: #aac5d8;
+      }
+
+      .team-signature {
+        font-size: 20px;
+        color: #d3aa58;
+        font-weight: bold;
+        margin-top: 20px;
+        letter-spacing: 2px;
+      }
+
+      /* Инструкция по копированию */
+      .copy-instruction {
+        text-align: center;
+        font-size: 14px;
+        color: #aac5d8ac;
+        margin-top: 10px;
+        padding: 10px;
+        background-color: rgba(170, 197, 216, 0.05);
+        border-radius: 5px;
+      }
+
+      .copy-instruction strong {
+        color: #aac5d8;
+      }
+
+      /* Адаптивность */
+      @media (max-width: 480px) {
+        .email-content {
+          padding: 20px;
+        }
+
+        .email-header h1 {
+          font-size: 24px;
+        }
+
+        .copy-instruction {
+          font-size: 13px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="email-container">
+      <div class="email-header">
+        <h1>Восстановление пароля</h1>
+      </div>
+
+      <div class="email-content">
+        <div class="message">
+          <p>
+            На сайте
+            <strong>XXX.com</strong>
+            запросили восстановление пароля.
+          </p>
+          <p>Если это были вы, то введите этот код на сайте:</p>
+        </div>
+
+        <div class="recovery-code-container">
+          <span class="recovery-code-label">ВАШ КОД ВОССТАНОВЛЕНИЯ:</span>
+
+          <div class="recovery-code-wrapper">
+            <!-- Код автоматически выделяется при касании/клике благодаря user-select: all -->
+            <div
+              class="recovery-code"
+              onclick="this.focus(); document.execCommand('selectAll');"
+            >
+              8H4K9P
+            </div>
+            <div class="copy-indicator">
+              Код выделен. Нажмите Ctrl+C (Cmd+C) для копирования
+            </div>
+          </div>
+
+          <div class="copy-instruction">
+            <strong>Как скопировать:</strong>
+            <br />
+            <strong>На ПК:</strong>
+            Кликните по коду, затем Ctrl+C или правой кнопкой → Копировать
+            <br />
+            <strong>На телефоне:</strong>
+            Нажмите и удерживайте код, затем выберите "Скопировать"
+          </div>
+        </div>
+
+        <div class="warning">
+          ⚠️ НИКОМУ НЕ ПЕРЕДАВАЙТЕ И НЕ СООБЩАЙТЕ ЭТОТ КОД
+        </div>
+
+        <div class="instructions">
+          <p><strong>Инструкция по восстановлению пароля:</strong></p>
+          <ol>
+            <li>Перейдите на страницу восстановления пароля на XXX.com</li>
+            <li>Вставьте скопированный код в поле "Код восстановления"</li>
+            <li>Создайте новый надежный пароль</li>
+            <li>Подтвердите изменения</li>
+          </ol>
+        </div>
+
+        <div style="text-align: center">
+          <a href="https://XXX.com/password-reset" class="cta-button">
+            Перейти к восстановлению
+          </a>
+        </div>
+
+        <p style="text-align: center; font-size: 14px; color: #aac5d8ac">
+          Ссылка действительна в течение 1 часа
+          <br />
+          Если вы не запрашивали восстановление пароля, просто проигнорируйте
+          это письмо
+        </p>
+      </div>
+
+      <div class="email-footer">
+        <p>С уважением,</p>
+        <div class="team-signature">Ваша команда MUZA</div>
+        <p style="margin-top: 20px; font-size: 12px; color: #ddd0bdac">
+          © 2024 MUZA. Все права защищены.
+          <br />
+          Это письмо отправлено автоматически, пожалуйста, не отвечайте на него
+        </p>
+      </div>
+    </div>
+
+    <script>
+      // Простой скрипт для улучшения опыта копирования
+      document.addEventListener("DOMContentLoaded", function () {
+        const recoveryCode = document.querySelector(".recovery-code");
+        const copyIndicator = document.querySelector(".copy-indicator");
+
+        if (recoveryCode) {
+          // Для ПК и мобильных устройств
+          recoveryCode.addEventListener("click", function () {
+            // Выделяем текст кода
+            const range = document.createRange();
+            range.selectNodeContents(this);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+
+            // Показываем индикатор копирования
+            if (copyIndicator) {
+              copyIndicator.style.opacity = "1";
+              setTimeout(() => {
+                copyIndicator.style.opacity = "0";
+              }, 2000);
+            }
+
+            // Попытка скопировать в буфер обмена (работает только на HTTPS)
+            try {
+              document.execCommand("copy");
+              console.log("Код скопирован в буфер обмена");
+            } catch (err) {
+              console.log("Не удалось скопировать автоматически");
+            }
+          });
+
+          // Для устройств с тач-экраном
+          recoveryCode.addEventListener("touchstart", function (e) {
+            e.preventDefault();
+            this.style.backgroundColor = "rgba(211, 170, 88, 0.2)";
+          });
+
+          recoveryCode.addEventListener("touchend", function () {
+            this.style.backgroundColor = "rgba(0, 0, 0, 0.5)";
+          });
+
+          // Адаптация размера шрифта для длинных кодов
+          const codeText = recoveryCode.textContent.trim();
+          if (codeText.length > 8) {
+            recoveryCode.classList.add("long-code");
+          }
+        }
+      });
+    </script>
+  </body>
+</html>
+700

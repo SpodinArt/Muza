@@ -96,28 +96,79 @@
         <!-- Форма восстановления пароля -->
         <div id="reset-password-form" class="auth-form">
           <h2>Восстановление пароля</h2>
-          <p>
-            Укажите вашу электронную почту, и мы отправим инструкцию по сбросу
-            пароля.
-          </p>
-          <div class="form-group">
-            <label for="reset-email">Электронная почта:</label>
-            <input
-              type="email"
-              id="reset-email"
-              class="form-control"
-              required
-            />
-            <div class="invalid-feedback">
-              Некорректный адрес электронной почты!
+
+          <!--Ввод почты auth-form -->
+          <div class="hidden">
+            <div class="form-group" id="form-input-mail">
+              <p>
+                Укажите вашу электронную почту, и мы отправим инструкцию по
+                сбросу пароля.
+              </p>
+              <label for="reset-email">Электронная почта:</label>
+              <input
+                type="email"
+                id="reset-email"
+                class="form-control"
+                required
+              />
+              <div class="invalid-feedback">
+                Некорректный адрес электронной почты!
+              </div>
+
+              <button type="button" class="btn btn-primary" id="send-email-btn">
+                Отправить
+              </button>
             </div>
           </div>
-          <button type="button" class="btn btn-primary" id="reset-password-btn">
-            Отправить
-          </button>
-          <button type="button" class="btn btn-link" id="showLoginForm">
-            Вернуться назад
-          </button>
+          <!--Ввод кода подтверждения-->
+          <div class="hidden">
+            <div class="form-group" id="reset-code">
+              <label for="reset-code">Введите код подтверждения</label>
+              <input
+                type="text"
+                id="reset-code-input"
+                class="form-control"
+                required=""
+              />
+              <button type="button" class="btn btn-primary" id="send-code-btn">
+                Отправить
+              </button>
+            </div>
+          </div>
+          <!--Ввод пароля для сброса-->
+          <div class="hidden">
+            <div class="form-group" id="form-call-back">
+              <div class="form-group">
+                <label for="send-password">Введите пароль</label>
+                <input
+                  type="password"
+                  id="send-password"
+                  class="form-control"
+                  placeholder="Придумайте пароль"
+                  required
+                  minlength="6"
+                />
+                <div class="invalid-feedback">
+                  Пароль должен содержать минимум 6 символов
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="send-confirm-password">Подтвердите пароль</label>
+                <input
+                  type="password"
+                  id="send-confirm-password"
+                  class="form-control"
+                  placeholder="Повторите пароль"
+                  required
+                />
+                <div class="invalid-feedback">Пароли не совпадают</div>
+              </div>
+              <button type="submit" class="btn btn-primary">Отправить</button>
+            </div>
+            <button type="button" class="btn btn-link" id="showLoginForm">
+              Вернуться назад
+            </button>
+          </div>
         </div>
         <!-- Форма регистрации -->
         <form id="register-form" class="auth-form">

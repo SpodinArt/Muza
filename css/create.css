@@ -127,18 +127,62 @@ html {
   cursor: text;
 }
 
-.upload-button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 8px 16px;
-  background-color: #fafafa;
-  border-radius: 4px;
-  font-size: 14px;
-  color: #383838;
-  cursor: pointer;
+/* SVG иконка для записи звука */
+.microphone-icon {
+  width: 18px;
+  height: 18px;
+  fill: currentColor;
 }
 
+/* Специальные стили для состояния записи */
+.record-button-icon.recording {
+  background: linear-gradient(135deg, #ff6b6b, #ff0000);
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+/* Уменьшаем иконку микрофона и выравниваем ее */
+.microphone-icon {
+  margin-left: 4px;
+}
+
+/* Применяем общее оформление ко всем иконам */
+.icon {
+  width: 18px;
+  height: 18px;
+  fill: currentColor;
+}
+
+/* Своя иконка в каждой кнопке */
+.record-button-icon svg,
+.upload-button {
+  margin-right: 0;
+}
+
+/* Теперь добавляем дополнительную обработку для активной кнопки записи */
+.record-button-icon.active {
+  background: linear-gradient(135deg, #ff6b6b, #ff0000);
+  animation: rotateAndPulse 1.5s infinite;
+}
+
+@keyframes rotateAndPulse {
+  0%,
+  100% {
+    transform: scale(1) rotate(0deg);
+  }
+  50% {
+    transform: scale(1.1) rotate(-10deg);
+  }
+}
 .file-icon {
   width: 18px;
   height: 18px;
@@ -146,7 +190,8 @@ html {
   fill: currentColor;
 }
 
-.record-button-icon {
+.record-button-icon,
+.upload-button {
   width: 40px;
   height: 40px;
   border-radius: 50%;
@@ -161,7 +206,8 @@ html {
   flex-shrink: 0;
 }
 
-.record-button-icon:hover {
+.record-button-icon:hover,
+.upload-button:hover {
   transform: scale(1.1);
   box-shadow: 0 0 15px rgba(211, 170, 88, 0.5);
 }
@@ -330,7 +376,8 @@ html {
     font-size: 12px;
   }
 
-  .record-button-icon {
+  .record-button-icon,
+  .upload-button {
     width: 35px;
     height: 35px;
   }
@@ -410,7 +457,8 @@ html {
     font-size: 11px;
   }
 
-  .record-button-icon {
+  .record-button-ico,
+  .upload-button {
     width: 32px;
     height: 32px;
   }
@@ -453,7 +501,8 @@ html {
     font-size: 20px;
   }
 
-  .record-button-icon {
+  .record-button-icon,
+  .upload-button {
     width: 60px;
     height: 60px;
   }
