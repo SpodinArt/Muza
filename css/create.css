@@ -1,3 +1,4 @@
+@import "./audioPlayer.css";
 /* Базовые настройки */
 html,
 body {
@@ -246,13 +247,13 @@ html {
 
 .audio-player {
   /* Изменение цвета фона */
-  background-color: #ff6347; /* Tomato красный */
+  background-color: #c9aba6; /* Tomato красный */
   /* Дополнительные опции */
   border: 1px solid #333; /* Цвет границы */
   border-radius: 8px; /* Скругление углов */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); /* Тень */
+  box-shadow: 0 2px 4px rgba(255, 36, 36, 0.3); /* Тень */
   filter: hue-rotate(180deg); /* Поворот цветового тона */
-  filter: invert(100%);
+
   --player-color: #4caf50; /* Основной цвет */
 }
 /* Кнопки */
