@@ -7,6 +7,7 @@ pub mod formattabs;
 pub mod logins;
 pub mod password_resets;
 pub mod personalaccount;
+pub mod sheetmusic;
 pub mod shellmusic;
 pub mod tabs;
 pub mod transposition;

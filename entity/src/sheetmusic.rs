@@ -3,16 +3,15 @@
 use sea_orm::entity::prelude::*;
 
 #[derive(Clone, Debug, PartialEq, DeriveEntityModel, Eq)]
-#[sea_orm(table_name = "password_resets")]
+#[sea_orm(table_name = "sheetmusic")]
 pub struct Model {
     #[sea_orm(primary_key)]
     pub id: i64,
-    pub email: String,
-    pub code: i64,
+    pub music_name: String,
+    pub artist: String,
+    pub hash_tab: String,
     pub create_date: DateTime,
-    pub expires_date: DateTime,
-    pub is_used: bool,
-    pub token: Option<String>,
+    pub modifate_date: Option<DateTime>,
     pub user_id: i64,
 }
 

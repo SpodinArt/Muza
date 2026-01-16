@@ -13,17 +13,66 @@ pub struct Model {
     pub phone_number: i64,
     pub create_date: DateTime,
     pub modifate_date: Option<DateTime>,
+    pub token: Option<String>,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
 pub enum Relation {
+    #[sea_orm(has_many = "super::formatsheetmusic::Entity")]
+    Formatsheetmusic,
+    #[sea_orm(has_many = "super::formattabs::Entity")]
+    Formattabs,
+    #[sea_orm(has_many = "super::password_resets::Entity")]
+    PasswordResets,
     #[sea_orm(has_many = "super::personalaccount::Entity")]
     Personalaccount,
+    #[sea_orm(has_many = "super::sheetmusic::Entity")]
+    Sheetmusic,
+    #[sea_orm(has_many = "super::tabs::Entity")]
+    Tabs,
+    #[sea_orm(has_many = "super::transposition::Entity")]
+    Transposition,
+}
+
+impl Related<super::formatsheetmusic::Entity> for Entity {
+    fn to() -> RelationDef {
+        Relation::Formatsheetmusic.def()
+    }
+}
+
+impl Related<super::formattabs::Entity> for Entity {
+    fn to() -> RelationDef {
+        Relation::Formattabs.def()
+    }
+}
+
+impl Related<super::password_resets::Entity> for Entity {
+    fn to() -> RelationDef {
+        Relation::PasswordResets.def()
+    }
 }
 
 impl Related<super::personalaccount::Entity> for Entity {
     fn to() -> RelationDef {
         Relation::Personalaccount.def()
+    }
+}
+
+impl Related<super::sheetmusic::Entity> for Entity {
+    fn to() -> RelationDef {
+        Relation::Sheetmusic.def()
+    }
+}
+
+impl Related<super::tabs::Entity> for Entity {
+    fn to() -> RelationDef {
+        Relation::Tabs.def()
+    }
+}
+
+impl Related<super::transposition::Entity> for Entity {
+    fn to() -> RelationDef {
+        Relation::Transposition.def()
     }
 }
 

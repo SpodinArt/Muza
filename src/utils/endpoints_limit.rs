@@ -11,7 +11,7 @@ pub async fn limitation_generate_code(
     email: &str
 ) -> bool {
 
-    let now = Utc::now().naive_utc();
+    let now = Utc::now().naive_utc() - Duration::hours(3);
 
     // Ищем единственную запись по email (всегда одна)
     match entity::password_resets::Entity::find()
@@ -21,14 +21,14 @@ pub async fn limitation_generate_code(
     {
         Ok(Some(record)) => {
 
-            now >= record.create_date + Duration::minutes(1) && now <= record.create_date + Duration::minutes(5)
+            now >= record.create_date + Duration::minutes(1) || now <= record.create_date + Duration::minutes(5)
         },
         Ok(None) => {
-            eprintln!("Записи не существует");
+            println!("Записи не существует");
             true
         },
         Err(err) => {
-            eprintln!("Ошибка при проверке ограничений: {}", err);
+            println!("Ошибка при проверке ограничений: {}", err);
             false
         }
     }

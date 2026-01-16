@@ -8,5 +8,7 @@ pub fn config(config: &mut web::ServiceConfig){
             .service(handlers::auth_handlers::register)
             .service(handlers::auth_handlers::login)
             .service(handlers::password_reset::send_email_internal)
+            .service(handlers::password_reset::pass_examination_code)
+            .service(handlers::password_reset::pass_resset)
     );
 }

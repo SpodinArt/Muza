@@ -53,7 +53,7 @@ impl YandexSmtpClient {
     Ok(Self {config, mailer})
 
 }
-    pub async fn send_email(&self, email: &String, code: String) -> Result<(), Box<dyn std::error::Error>>  {
+    pub async fn send_email(&self, email: &String, code: i64) -> Result<(), Box<dyn std::error::Error>>  {
                         
         let message = Message::builder()
             .to(email.parse()?)

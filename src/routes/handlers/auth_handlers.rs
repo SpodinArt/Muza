@@ -89,11 +89,16 @@ pub async fn login(app_state: web::Data<app_state::AppState>,
      .map_err(|err| ApiResponse::new(500, err.to_string()))?
      .ok_or(ApiResponse::new(404, "Пользователя с таким именем не существует".to_owned()))?;
 
-    let token = encode_jwt(user_data.email, user_data.id as i32)
+    let token = encode_jwt(user_data.email.clone(), user_data.id as i32)
     .map_err(|err| ApiResponse::new(500, err.to_string()))?;
 
-    //user_data.token = Set(token); раскомитить когда будет готов токен в Logins
-
+    let mut user_data_active: entity::logins::ActiveModel = user_data.into();
+    // Устанавливаем токен
+    user_data_active.token = sea_orm::ActiveValue::Set(Some(token.clone()));
+    // Обновляем запись в базе данных
+    user_data_active.update(&app_state.db)
+        .await
+        .map_err(|err| ApiResponse::new(500, err.to_string()))?;
 
     Ok(api_responce::ApiResponse::new(200, format!("{{\"token\": \"{}\"}}", token)))
 }

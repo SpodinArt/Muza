@@ -11,9 +11,25 @@ pub struct Model {
     pub transformation: String,
     pub create_date: DateTime,
     pub modifate_date: Option<DateTime>,
+    pub user_id: i64,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
-pub enum Relation {}
+pub enum Relation {
+    #[sea_orm(
+        belongs_to = "super::logins::Entity",
+        from = "Column::UserId",
+        to = "super::logins::Column::Id",
+        on_update = "NoAction",
+        on_delete = "NoAction"
+    )]
+    Logins,
+}
+
+impl Related<super::logins::Entity> for Entity {
+    fn to() -> RelationDef {
+        Relation::Logins.def()
+    }
+}
 
 impl ActiveModelBehavior for ActiveModel {}
