@@ -1,7 +1,4 @@
 //! ограничение обращения к эндпоинту
-//! при обращении на важные поинты устанавливаем в бд counter и data_time и проверяем сколько, за период времени было обращений
-
-
 use chrono::{Duration, Utc};
 use sea_orm::{ColumnTrait, DatabaseConnection, EntityTrait, QueryFilter};
 
@@ -11,7 +8,7 @@ pub async fn limitation_generate_code(
     email: &str
 ) -> bool {
 
-    let now = Utc::now().naive_utc() - Duration::hours(3);
+    let now = Utc::now().naive_utc();
 
     // Ищем единственную запись по email (всегда одна)
     match entity::password_resets::Entity::find()
@@ -21,7 +18,7 @@ pub async fn limitation_generate_code(
     {
         Ok(Some(record)) => {
 
-            now >= record.create_date + Duration::minutes(1) || now <= record.create_date + Duration::minutes(5)
+            now >= record.create_date + Duration::seconds(60) //|| now >= record.create_date + Duration::seconds(300)
         },
         Ok(None) => {
             println!("Записи не существует");

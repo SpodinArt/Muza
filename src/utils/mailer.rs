@@ -1,8 +1,8 @@
 //! модуль подключения к почте, и создания секретного кода для сброса пароля
-use lettre::{ Message, SmtpTransport, Transport, transport::smtp::{ SMTP_PORT, authentication::Credentials} };
+use std::{fs, mem::replace};
+
+use lettre::{ Message, SmtpTransport, Transport, message::header::ContentType, transport::smtp::{ SMTP_PORT, authentication::Credentials} };
 use lettre::transport::smtp::client::{Tls, TlsParameters};
-
-
 use super::constants::{SMTP_USERNAME, SMTP_PASSWORD,SMTP_HOST};
 
 
@@ -54,12 +54,17 @@ impl YandexSmtpClient {
 
 }
     pub async fn send_email(&self, email: &String, code: i64) -> Result<(), Box<dyn std::error::Error>>  {
+
+        let html_content = fs::read_to_string("static/mail.html")?;
+        let html_content = html_content
+        .replace("{{code}}", &code.to_string());
                         
         let message = Message::builder()
             .to(email.parse()?)
             .from(self.config.username.clone().parse()?)
             .subject("Ваш код подтверждения".to_string())
-            .body(format!("Ваш код для подтверждения: {}\n\nКод действует 5 минут. Не сообщайте его никому!", code))?;
+            .header(ContentType::TEXT_HTML)
+            .body(html_content)?;
 
         match self.mailer.send(&message) {
             Ok(_) => {

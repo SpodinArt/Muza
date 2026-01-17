@@ -66,7 +66,6 @@ app_state: web::Data<app_state::AppState>,
 // Проверяем, есть ли уже запись для этого email
 let existing = entity::password_resets::Entity::find()
     .filter(entity::password_resets::Column::Email.eq(&email_json.email))
-    .filter(entity::password_resets::Column::IsUsed.eq(false))
     .one(&app_state.db).await
     .map_err(|err| ApiResponse::new(500, err.to_string()))?;
 
@@ -97,6 +96,7 @@ match existing {
         .map_err(|err| ApiResponse::new(500, err.to_string()))?;
     }
 }
+
     let config = crate::utils::mailer::YandexSmtpConfig::default();
     let client = YandexSmtpClient::new(config).await
     .map_err(|err| ApiResponse::new(500, err.to_string()))?;
@@ -183,18 +183,6 @@ async fn pass_resset(app_state: web::Data<app_state::AppState>, token_and_pass: 
     user_flag.update(&app_state.db)
         .await
         .map_err(|err| ApiResponse::new(500, err.to_string()))?;
-
-
-
-
-
-
-// ПЕреписать смену флага в БД
-// Добавить автовход
-
-
-
-   
 
     Ok(api_responce::ApiResponse::new(200, format!("{{\"token\": \"{}\"}}", token)))
 }
