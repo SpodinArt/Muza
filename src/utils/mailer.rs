@@ -1,5 +1,5 @@
 //! модуль подключения к почте, и создания секретного кода для сброса пароля
-use std::{fs, mem::replace};
+use std::{fs};
 
 use lettre::{ Message, SmtpTransport, Transport, message::header::ContentType, transport::smtp::{ SMTP_PORT, authentication::Credentials} };
 use lettre::transport::smtp::client::{Tls, TlsParameters};
