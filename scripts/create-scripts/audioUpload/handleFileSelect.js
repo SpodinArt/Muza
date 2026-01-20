@@ -1,6 +1,11 @@
+import { showMessage } from "../interface/showMessage.js";
 // Обработка выбора файла
 export function handleFileSelect(event) {
+  const audioInputField = document.getElementById("audioInputField");
+  const uploadedAudioPlayer = document.getElementById("uploadedAudioPlayer");
+  const recordedAudioPlayer = document.getElementById("recordedAudioPlayer");
   const file = event.target.files[0];
+
   if (file) {
     // Проверяем тип файла
     if (!file.type.startsWith("audio/")) {
@@ -19,8 +24,5 @@ export function handleFileSelect(event) {
 
     // Показываем сообщение о успешной загрузке
     showMessage("Аудиофайл успешно загружен", "success");
-
-    // Генерируем ноты (заглушка)
-    generateNotesFromAudio(file);
   }
 }

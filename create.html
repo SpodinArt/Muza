@@ -27,42 +27,40 @@
               />
               <button class="record-button-icon" id="recordButton">
                 <svg
-                  class="microphone-icon"
-                  viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg"
+                xmlns="http://www.w3.org/2000/svg"
+                class="microphone-icon"
+                  width="20"
+                  height="20"
+                  viewBox="-0.5 0 25 25"
+                  fill="none"
                 >
                   <path
-                    d="M12 1C10.34 1 9 2.34 9 4V12C9 13.66 10.34 15 12 15C13.66 15 15 13.66 15 12V4C15 2.34 13.66 1 12 1Z"
+                    d="M7 7.40991C7 6.08383 7.52677 4.81207 8.46445 3.87439C9.40213 2.93671 10.6739 2.40991 12 2.40991C13.3261 2.40991 14.5978 2.93671 15.5355 3.87439C16.4732 4.81207 17 6.08383 17 7.40991V13.4099C17 14.736 16.4732 16.0079 15.5355 16.9456C14.5978 17.8832 13.3261 18.4099 12 18.4099C10.6739 18.4099 9.40213 17.8832 8.46445 16.9456C7.52677 16.0079 7 14.736 7 13.4099V7.40991Z"
+                    stroke="#000000"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
                   />
                   <path
-                    d="M17 12V13C17 16.31 14.31 19 11 19C7.69 19 5 16.31 5 13V12H7V13C7 15.21 8.79 17 11 17C13.21 17 15 15.21 15 13V12H17Z"
+                    d="M21 13.4099C21 15.7969 20.0518 18.0861 18.364 19.7739C16.6761 21.4618 14.3869 22.4099 12 22.4099C9.61305 22.4099 7.32384 21.4618 5.63602 19.7739C3.94819 18.0861 3 15.7969 3 13.4099"
+                    stroke="#000000"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
                   />
-                  <path d="M8 21H16V23H8V21Z" />
                 </svg>
               </button>
-              <button class="upload-button">
-                <svg
-                  class="microphone-icon"
-                  viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M12 1C10.34 1 9 2.34 9 4V12C9 13.66 10.34 15 12 15C13.66 15 15 13.66 15 12V4C15 2.34 13.66 1 12 1Z"
-                  />
-                  <path
-                    d="M17 12V13C17 16.31 14.31 19 11 19C7.69 19 5 16.31 5 13V12H7V13C7 15.21 8.79 17 11 17C13.21 17 15 15.21 15 13V12H17Z"
-                  />
-                  <path d="M8 21H16V23H8V21Z" />
-                </svg>
-              </button>
+              <label class="file-input-wrapper">
+                <input type="file" id="uploadAudio" accept="audio/*" />
+                <img
+                  src="./media/upload-icon-40X40.svg"
+                  alt="загрузить файл"
+                  width="24"
+                  height="24"
+                />
+              </label>
             </div>
 
-            <input
-              type="file"
-              id="uploadAudio"
-              accept="audio/*"
-              style="display: none"
-            />
             <audio
               id="uploadedAudioPlayer"
               class="audio-player"
@@ -198,7 +196,6 @@
 
             <canvas id="musicSheet" class="music-canvas"></canvas>
             <div class="tone-buttons">
-             
               <button class="btn-common" onclick="increaseTone()">
                 Повысить тональность
               </button>
@@ -218,9 +215,6 @@
       </div>
     </main>
 
-    <script
-      src="./scripts/create-scripts/interface/index.js"
-      type="module"
-    ></script>
+    <script src="./scripts/create-scripts/index.js" type="module"></script>
   </body>
 </html>
