@@ -6,4 +6,4 @@ export function initREsetPassRequest(name, email, password, phone) {
     password: password,
     phone_number: aaa,
     //phone_number: phone,
-  };
+  }
