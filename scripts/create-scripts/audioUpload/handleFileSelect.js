@@ -4,6 +4,9 @@ export function handleFileSelect(event) {
   const audioInputField = document.getElementById("audioInputField");
   const uploadedAudioPlayer = document.getElementById("uploadedAudioPlayer");
   const recordedAudioPlayer = document.getElementById("recordedAudioPlayer");
+  const customRecordedAudioPlayer = document.getElementById("audioPlayer");
+  const customUploadedAudioPlayer =
+    document.getElementById("audioPlayerSecond");
   const file = event.target.files[0];
 
   if (file) {
@@ -19,8 +22,8 @@ export function handleFileSelect(event) {
     // Создаем URL для воспроизведения
     const audioURL = URL.createObjectURL(file);
     uploadedAudioPlayer.src = audioURL;
-    uploadedAudioPlayer.style.display = "block";
-    recordedAudioPlayer.style.display = "none";
+    customUploadedAudioPlayer.style.display = "";
+    customRecordedAudioPlayer.style.display = "none";
 
     // Показываем сообщение о успешной загрузке
     showMessage("Аудиофайл успешно загружен", "success");
