@@ -18,13 +18,13 @@ struct PasswordResetRequest{
     email:String,
 }
 #[derive(Debug, Serialize, Deserialize)]
-struct Pass_Examination_Code {
+struct PassExaminationCode {
     email: String,
     code: i32,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
-struct Token_And_Pass {
+struct TokenAndPass {
     email: String,
     token: String,
     pass: String
@@ -112,7 +112,7 @@ match existing {
 
 
 #[post("/pass_examination_code")]
-async fn pass_examination_code(app_state: web::Data<app_state::AppState>, email_code: web::Json<Pass_Examination_Code>) 
+async fn pass_examination_code(app_state: web::Data<app_state::AppState>, email_code: web::Json<PassExaminationCode>) 
 -> Result<ApiResponse,ApiResponse> {
 
     let now = Utc::now().naive_utc();
@@ -147,8 +147,9 @@ async fn pass_examination_code(app_state: web::Data<app_state::AppState>, email_
 }
 
 
+
 #[post("/pass_resset")]
-async fn pass_resset(app_state: web::Data<app_state::AppState>, token_and_pass: web::Json<Token_And_Pass>) 
+async fn pass_resset(app_state: web::Data<app_state::AppState>, token_and_pass: web::Json<TokenAndPass>) 
 -> Result<ApiResponse,ApiResponse> {
 
 

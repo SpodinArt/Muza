@@ -41,7 +41,7 @@ pub fn null_email(email: &String) -> bool {
 
 pub fn generate_code() -> i64{
     // Генерируем случайный код
-        let mut rng = rand::thread_rng();
-        let code = rng.gen_range(100000..=999999);
+        let mut rng = rand::rng();
+        let code = rng.random_range(100000..=999999);
         code
 }
