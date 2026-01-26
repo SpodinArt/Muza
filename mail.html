@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ru">
   <head>
     <meta charset="UTF-8" />
@@ -284,9 +284,12 @@
             <!-- Код автоматически выделяется при касании/клике благодаря user-select: all -->
             <div
               class="recovery-code"
-              onclick="this.focus(); document.execCommand('selectAll');"
+              onclick="
+                this.focus();
+                document.execCommand('selectAll');
+              "
             >
-              8H4K9P
+              <div class="code">{{code}}</div>
             </div>
             <div class="copy-indicator">
               Код выделен. Нажмите Ctrl+C (Cmd+C) для копирования
