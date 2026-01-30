@@ -153,7 +153,6 @@ html {
 
 /* Уменьшаем иконку микрофона и выравниваем ее */
 .microphone-icon {
-
 }
 
 /* Применяем общее оформление ко всем иконам */
@@ -298,7 +297,7 @@ html {
   margin-bottom: 15px;
   width: 100%;
   height: auto;
-  background-color: white;
+  background-color: #ddd0bd;
   /*border: 2px solid #d3aa58;
    border-radius: 6px; */
   max-width: 100%;

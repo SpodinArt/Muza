@@ -1,7 +1,21 @@
-import { validateEmail } from "./reg-script/validation.js";
+import { validateEmail } from "../scripts/reg-script/validation.js";
+import { showMessage } from "./utilits/showMessage.js";
+import { getTokenFromURL } from "./reset-pass/getUrlToken.js";
+import { initSendEmail } from "./requests/initSendEmail.js";
+import { initSendNewPassword } from "./requests/initSendNewPassword.js";
 
-// Скрываем форму восстановления пароля по умолчанию
-document.getElementById("reset-password-form").style.display = "none";
+// Проверяем наличие токена в URL при загрузке страницы
+document.addEventListener("DOMContentLoaded", function () {
+  const token = getTokenFromURL();
+
+  if (token) {
+    // Если есть токен, показываем форму для ввода нового пароля
+    showSetPasswordForm(token);
+  } else {
+    // Если нет токена, скрываем форму восстановления пароля по умолчанию
+    document.getElementById("reset-password-form").style.display = "none";
+  }
+});
 
 // Обработчик события клика на ссылку "Забыли пароль?"
 document
@@ -11,7 +25,7 @@ document
     showResetPasswordForm();
   });
 
-// Показываем форму восстановления пароля
+// Показываем форму восстановления пароля (ввод email)
 function showResetPasswordForm() {
   document.getElementById("login-form").classList.remove("active");
   document.getElementById("register-form").classList.remove("active");
@@ -23,6 +37,79 @@ function showResetPasswordForm() {
   });
   document.getElementById("form-input-mail").parentElement.style.display =
     "block";
+
+  // Убедимся, что заголовок формы виден
+  const formTitle = document.querySelector("#reset-password-form h2");
+  if (formTitle) formTitle.style.display = "block";
+
+  // Скрываем форму ввода пароля если она была видна
+  document.getElementById("form-call-back").parentElement.style.display =
+    "none";
+}
+
+// Показываем форму для установки нового пароля (при переходе по ссылке с токеном)
+function showSetPasswordForm(token) {
+  console.log("Показываем форму установки пароля с токеном:", token);
+
+  // Сохраняем токен в глобальной переменной
+  window.resetToken = token;
+
+  // Скрываем все другие формы
+  document.getElementById("login-form").classList.remove("active");
+  document.getElementById("register-form").classList.remove("active");
+
+  // ПОКАЗЫВАЕМ форму восстановления пароля
+  document.getElementById("reset-password-form").style.display = "block";
+
+  // Скрываем заголовок формы восстановления
+  const formTitle = document.querySelector("#reset-password-form h2");
+  if (formTitle) formTitle.style.display = "none";
+
+  // Скрываем все скрытые блоки внутри формы
+  document.querySelectorAll("#reset-password-form .hidden").forEach((el) => {
+    el.style.display = "none";
+  });
+
+  // Показываем форму ввода пароля
+  const passwordFormContainer =
+    document.getElementById("form-call-back").parentElement;
+  passwordFormContainer.style.display = "block";
+
+  // Меняем текст кнопки и добавляем ID
+  const submitBtn = document.querySelector(
+    '#form-call-back button[type="submit"]',
+  );
+  if (submitBtn) {
+    submitBtn.textContent = "Установить новый пароль";
+    submitBtn.id = "send-2pass-btn";
+  }
+
+  // Добавляем текст-описание
+  let description = document.querySelector(
+    "#form-call-back .password-description",
+  );
+  if (!description) {
+    description = document.createElement("p");
+    description.className = "password-description";
+    description.textContent = "Введите новый пароль для вашей учетной записи";
+    description.style.marginBottom = "20px";
+    description.style.color = "#ddd0bd";
+
+    const formCallBack = document.getElementById("form-call-back");
+    if (formCallBack) {
+      formCallBack.insertBefore(description, formCallBack.firstChild);
+    }
+  }
+
+  // Делаем активной вкладку "Вход"
+  document.getElementById("buttonLogin").classList.add("active");
+  document.getElementById("buttonRegister").classList.remove("active");
+
+  // Скрываем кнопку "Вернуться назад" так как мы уже в режиме сброса пароля
+  const backButton = document.getElementById("showLoginForm");
+  if (backButton) {
+    backButton.style.display = "none";
+  }
 }
 
 // Возвращаемся к форме входа
@@ -31,7 +118,7 @@ function showLoginForm() {
   document.getElementById("reset-password-form").style.display = "none";
 }
 
-// Отправляем запрос на восстановление пароля
+// Отправляем запрос на восстановление пароля (отправка email)
 function sendResetPassword() {
   const resetEmail = document.getElementById("reset-email").value.trim();
   const emailFeedback = document.querySelector(
@@ -47,48 +134,54 @@ function sendResetPassword() {
   // Скрываем ошибку если была
   emailFeedback.style.display = "none";
 
-  // запрос на сервер для отправки письма бэку отправляем емаил
+  // Используем функцию из отдельного модуля
+  initSendEmail(resetEmail)
+    .then((result) => {
+      if (result.success) {
+        // Показываем сообщение об успешной отправке
+        showMessage(result.message, "success");
 
-  const PasswordResetRequest = {
-    email: resetEmail,
-  };
+        // Скрываем форму ввода email и заголовок
+        document.getElementById("form-input-mail").parentElement.style.display =
+          "none";
+        const formTitle = document.querySelector("#reset-password-form h2");
+        if (formTitle) formTitle.style.display = "none";
 
-  fetch("http://127.0.0.1:8080/auth/password_reset_request", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(PasswordResetRequest),
-  });
-  console.log("Запрос отправлен на восстановление пароля для:", resetEmail);
+        // Показываем сообщение о том, что письмо отправлено
+        const messageDiv = document.createElement("div");
+        messageDiv.className = "reset-message";
+        messageDiv.innerHTML = `
+                    <h3>Письмо отправлено</h3>
+                    <p>Инструкции по восстановлению пароля отправлены на указанный email.</p>
+                    <p>Пожалуйста, проверьте вашу почту и следуйте инструкциям в письме.</p>
+                `;
 
-  //   .then(async (response) => {
-  //   console.log("отправлено");
-  //   console.log("слушаю");
+        // Удаляем предыдущее сообщение если есть
+        const oldMessage = document.querySelector(
+          "#reset-password-form .reset-message",
+        );
+        if (oldMessage) oldMessage.remove();
 
-  //   // Пытаемся получить ответ как текст сначала
-  //   const responseText = await response.text();
+        // Вставляем сообщение перед кнопкой "Вернуться назад"
+        const backButton = document.getElementById("showLoginForm");
+        document
+          .getElementById("reset-password-form")
+          .insertBefore(messageDiv, backButton);
 
-  //   let result;
-  //   try {
-  //     // Пытаемся парсить как JSON
-  //     result = JSON.parse(responseText);
-  //   } catch (e) {
-  //     // Если не JSON, то это текстовая ошибка
-  //     result = { message: responseText };
-  //   }
-
-  //   if (!response.ok) {
-  //     throw new Error(result.message || `Ошибка HTTP: ${response.status}`);
-  //   }
-
-  //   return result;
-  // })
-
-  // После отправки email переходим ко второму шагу (ввод кода)
-  document.getElementById("form-input-mail").parentElement.style.display =
-    "none";
-  document.getElementById("reset-code").parentElement.style.display = "block";
+        console.log(
+          "Запрос отправлен на восстановление пароля для:",
+          resetEmail,
+        );
+      }
+    })
+    .catch((error) => {
+      console.error("Ошибка при отправке запроса:", error);
+      showMessage(
+        error.message ||
+          "Произошла ошибка при отправке запроса. Попробуйте позже.",
+        "error",
+      );
+    });
 
   return true;
 }
@@ -103,54 +196,111 @@ document
   .getElementById("showLoginForm")
   .addEventListener("click", showLoginForm);
 
-// Обработчик для кнопки отправки кода (этап 2)
-document.getElementById("send-code-btn").addEventListener("click", function () {
-  const code = document.getElementById("reset-code-input").value.trim();
-
-  if (!code) {
-    alert("Введите код подтверждения");
-    return;
-  }
-
-  console.log("Код подтверждения:", code);
-
-  // Проверяем код (здесь должна быть логика проверки)
-  if (code === "123456") {
-    // Замените на реальную проверку
-    // Переходим к третьему шагу (ввод нового пароля)
-    document.getElementById("reset-code").parentElement.style.display = "none";
-    document.getElementById("form-call-back").parentElement.style.display =
-      "block";
-  } else {
-    alert("Неверный код подтверждения");
-  }
-});
-
-// Обработчик для кнопки отправки нового пароля (этап 3)
-document
-  .querySelector('#form-call-back button[type="submit"]')
-  .addEventListener("click", function (e) {
+// Обработчик для кнопки отправки нового пароля (для этапа с токеном)
+document.addEventListener("click", function (e) {
+  if (e.target && e.target.id === "send-2pass-btn") {
     e.preventDefault();
+
+    if (!window.resetToken) {
+      showMessage("Ошибка: токен не найден", "error");
+      return;
+    }
 
     const password = document.getElementById("send-password").value;
     const confirmPassword = document.getElementById(
       "send-confirm-password",
     ).value;
+    const passwordFeedback = document.querySelector(
+      "#send-password + .invalid-feedback",
+    );
+    const confirmFeedback = document.querySelector(
+      "#send-confirm-password + .invalid-feedback",
+    );
+
+    // Сбрасываем предыдущие ошибки
+    if (passwordFeedback) passwordFeedback.style.display = "none";
+    if (confirmFeedback) confirmFeedback.style.display = "none";
 
     // Проверка пароля
+    let isValid = true;
+
     if (password.length < 6) {
-      alert("Пароль должен содержать минимум 6 символов");
-      return;
+      if (passwordFeedback) {
+        passwordFeedback.textContent =
+          "Пароль должен содержать минимум 6 символов";
+        passwordFeedback.style.display = "block";
+      }
+      isValid = false;
     }
 
     if (password !== confirmPassword) {
-      alert("Пароли не совпадают");
+      if (confirmFeedback) {
+        confirmFeedback.textContent = "Пароли не совпадают";
+        confirmFeedback.style.display = "block";
+      }
+      isValid = false;
+    }
+
+    if (!isValid) {
       return;
     }
 
-    console.log("Новый пароль установлен");
-    alert("Пароль успешно изменен!");
+    console.log(
+      "Отправка запроса на сброс пароля с токеном:",
+      window.resetToken,
+    );
 
-    // Возвращаемся к форме входа
-    showLoginForm();
-  });
+    // Используем функцию из отдельного модуля
+    initSendNewPassword(window.resetToken, password)
+      .then((result) => {
+        if (result.redirect && result.status === 404) {
+          window.location.href = "/error.html";
+          return;
+        }
+
+        if (result.success) {
+          // Сохраняем новый токен в localStorage
+          if (result.token) {
+            localStorage.setItem("token", result.token);
+          }
+
+          showMessage(result.message, "success");
+
+          // Перенаправляем на страницу create
+          setTimeout(() => {
+            window.location.href = "/create";
+          }, 2000);
+        }
+      })
+      .catch((error) => {
+        console.error("Ошибка при изменении пароля:", error);
+        showMessage(
+          error.message || "Произошла ошибка при изменении пароля",
+          "error",
+        );
+      });
+  }
+});
+
+// Добавляем обработчик при загрузке для кнопки с ID send-2pass-btn
+document.addEventListener("DOMContentLoaded", function () {
+  const sendPassBtn = document.getElementById("send-2pass-btn");
+  if (sendPassBtn) {
+    sendPassBtn.addEventListener("click", function (e) {
+      e.preventDefault();
+
+      // Проверяем, есть ли токен
+      if (!window.resetToken) {
+        showMessage(
+          "Для изменения пароля необходимо перейти по ссылке из письма",
+          "error",
+        );
+        return;
+      }
+
+      // Если токен есть, запускаем процесс отправки
+      const event = new Event("click");
+      document.getElementById("send-2pass-btn").dispatchEvent(event);
+    });
+  }
+});

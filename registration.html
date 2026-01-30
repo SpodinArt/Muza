@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ru">
   <head>
     <meta charset="UTF-8" />
@@ -120,22 +120,7 @@
               </button>
             </div>
           </div>
-          <!--Ввод кода подтверждения-->
-          <div class="hidden">
-            <div class="form-group" id="reset-code">
-              <p>Код был отправлен навашу электронную почту.</p>
-              <label for="reset-code-input">Введите код подтверждения</label>
-              <input
-                type="text"
-                id="reset-code-input"
-                class="form-control"
-                required=""
-              />
-              <button type="button" class="btn btn-primary" id="send-code-btn">
-                Отправить
-              </button>
-            </div>
-          </div>
+
           <!--Ввод пароля для сброса-->
           <div class="hidden">
             <div class="form-group" id="form-call-back">
@@ -164,7 +149,9 @@
                 />
                 <div class="invalid-feedback">Пароли не совпадают</div>
               </div>
-              <button type="submit" class="btn btn-primary">Отправить</button>
+              <button type="submit" class="btn btn-primary" id="send-2pass-btn">
+                Установить новый пароль
+              </button>
             </div>
           </div>
           <button type="button" class="btn btn-link" id="showLoginForm">

@@ -1,4 +1,4 @@
-import { showMessage } from "../interface/showMessage.js";
+import { showMessage } from "../../utilits/showMessage.js";
 // Обработка выбора файла
 export function handleFileSelect(event) {
   const audioInputField = document.getElementById("audioInputField");
