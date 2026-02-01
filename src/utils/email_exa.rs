@@ -1,4 +1,3 @@
-use rand::Rng;
 use sea_orm::{DatabaseConnection, EntityTrait, ColumnTrait, QueryFilter};
 
 pub struct UserRepository;
@@ -37,11 +36,4 @@ pub fn null_email(email: &String) -> bool {
     if email.trim().is_empty() {
         ret = false;
     } ret
-}
-
-pub fn generate_code() -> i64{
-    // Генерируем случайный код
-        let mut rng = rand::rng();
-        let code = rng.random_range(100000..=999999);
-        code
 }

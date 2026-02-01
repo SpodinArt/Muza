@@ -17,15 +17,9 @@ use sea_orm::{ActiveModelTrait, ColumnTrait, Condition, EntityTrait, QueryFilter
 struct PasswordResetRequest{
     email:String,
 }
-#[derive(Debug, Serialize, Deserialize)]
-struct PassExaminationCode {
-    email: String,
-    code: i32,
-}
 
 #[derive(Debug, Serialize, Deserialize)]
 struct TokenAndPass {
-    email: String,
     token: String,
     pass: String
 }
@@ -36,18 +30,10 @@ app_state: web::Data<app_state::AppState>,
 ) -> Result<ApiResponse, ApiResponse> {
  use crate::utils::mailer::YandexSmtpClient;
 
-    let code = generate_code();
-    let time_examin = limitation_generate_code(&app_state.db, &email_json.email).await;
 
-
-    // Когда код дергал ты??
-    if !time_examin {
-        return Err(ApiResponse::new(410, "Истекло время кода".to_string()));
-    }
-
-    // Проверяем email на пустоту
+        // Проверяем email на пустоту
     if !null_email(&email_json.email) {
-        return Err(ApiResponse::new(400, "Пустой Email".to_string()));
+        return Err(ApiResponse::new(404, "Пустой Email".to_string()));
     }
 
 
@@ -55,95 +41,73 @@ app_state: web::Data<app_state::AppState>,
             &app_state.db,  
             &email_json.email 
         ).await
-        .map_err(|err| format!("Ошибка базы данных: {}", err));
+        .map_err(|err| ApiResponse::new(500, format!("Ошибка базы данных: {}", err)))?;
    
 
-        // Если мыла нет в системе
-        if user_exists == Ok(false) {
-    return Err(ApiResponse::new(404, "Не существующий Email".to_string()));
+    // Если мыла нет в системе
+    if !user_exists {
+        return Err(ApiResponse::new(401, "Не существующий Email".to_string()));
+    }
+
+
+    // Когда код дергал ты??
+    let time_examin = limitation_generate_code(&app_state.db, &email_json.email).await;
+    if !time_examin {
+        return Err(ApiResponse::new(410, "Истекло время кода".to_string()));
+    }
+
+      // Получаем пользователя
+    let user = entity::logins::Entity::find()
+        .filter(entity::logins::Column::Email.eq(&email_json.email))
+        .one(&app_state.db).await
+        .map_err(|err| ApiResponse::new(500, err.to_string()))?
+        .ok_or(ApiResponse::new(404, "Пользователь не найден".to_owned()))?;
+
+    // Генерируем токен для сброса (отдельный от auth токена)
+    let token = encode_jwt(user.email.clone(), user.id as i32)
+        .map_err(|err| ApiResponse::new(500, err.to_string()))?;
+
+    // Создаем или обновляем запись сброса пароля
+    let existing = entity::password_resets::Entity::find()
+        .filter(entity::password_resets::Column::Email.eq(&email_json.email))
+        .one(&app_state.db).await
+        .map_err(|err| ApiResponse::new(500, err.to_string()))?;
+
+    match existing {
+        Some(record) => {
+            let mut active_model: entity::password_resets::ActiveModel = record.into();
+            active_model.token = Set(Some(token.clone()));
+            active_model.create_date = Set(Utc::now().naive_utc());
+            active_model.expires_date = Set(Utc::now().naive_utc() + Duration::minutes(5));
+            active_model.is_used = Set(false);
+            
+            active_model.update(&app_state.db).await
+                .map_err(|err| ApiResponse::new(500, err.to_string()))?;
         }
-
-
-// Проверяем, есть ли уже запись для этого email
-let existing = entity::password_resets::Entity::find()
-    .filter(entity::password_resets::Column::Email.eq(&email_json.email))
-    .one(&app_state.db).await
-    .map_err(|err| ApiResponse::new(500, err.to_string()))?;
-
-
-match existing {
-    Some(mut _record) => {
-        // Обновляем существующую запись
-        let mut active_model: entity::password_resets::ActiveModel = _record.into();
-        active_model.code = Set(code.clone());
-        active_model.create_date = Set(Utc::now().naive_utc());
-        active_model.expires_date = Set(Utc::now().naive_utc() + Duration::minutes(5));
-        active_model.is_used = Set(false);
-        active_model.update(&app_state.db).await
-        .map_err(|err| ApiResponse::new(500, err.to_string()))?;
+        None => {
+            entity::password_resets::ActiveModel {
+                email: Set(email_json.email.clone()),
+                token: Set(Some(token.clone())),
+                create_date: Set(Utc::now().naive_utc()),
+                expires_date: Set(Utc::now().naive_utc() + Duration::minutes(5)),
+                is_used: Set(false),
+                code: Set(12345),//Заглушка
+                user_id: Set(1),//Заглушка
+                ..Default::default()
+            }.insert(&app_state.db).await
+            .map_err(|err| ApiResponse::new(500, err.to_string()))?;
+        }
     }
-    None => {
-        // Создаем новую запись
-        entity::password_resets::ActiveModel {
-            email: Set(email_json.email.clone()),
-            code: Set(code.clone()),
-            create_date: Set(Utc::now().naive_utc()),
-            expires_date: Set(Utc::now().naive_utc() + Duration::minutes(5)),
-            is_used: Set(false),
-            user_id: Set(1),// Дропнуть после исправления БД
-            ..Default::default()
-        }.insert(&app_state.db).await
-        .map_err(|err| ApiResponse::new(500, err.to_string()))?;
-    }
-}
 
 
     let config = crate::utils::mailer::YandexSmtpConfig::default();
     let client = YandexSmtpClient::new(config).await
     .map_err(|err| ApiResponse::new(500, err.to_string()))?;
-    client.send_email(&email_json.email, code).await
+    client.send_email(&email_json.email, token.clone()).await
     .map_err(|err| ApiResponse::new(500, err.to_string()))?;
 
 
-    Ok(api_responce::ApiResponse::new(200, format!("Введите код")))
-}
-
-
-
-
-#[post("/pass_examination_code")]
-async fn pass_examination_code(app_state: web::Data<app_state::AppState>, email_code: web::Json<PassExaminationCode>) 
--> Result<ApiResponse,ApiResponse> {
-
-    let now = Utc::now().naive_utc();
-
-    let user_data = entity::password_resets::Entity::find()
-        .filter(
-            Condition::all()
-            .add(entity::password_resets::Column::Email.eq(&email_code.email))
-            .add(entity::password_resets::Column::Code.eq(email_code.code.clone()))
-            .add(entity::password_resets::Column::IsUsed.eq(false))
-            .add(entity::password_resets::Column::ExpiresDate.gt(now))
-        )
-        .one(&app_state.db).await
-        .map_err(|err| ApiResponse::new(500, err.to_string()))?
-     .ok_or(ApiResponse::new(401, "Неверный код подтверждения или время его действия истекло".to_owned()))?;
-
-
-    let token = encode_jwt(user_data.email.clone(), user_data.id as i32)
-    .map_err(|err| ApiResponse::new(500, err.to_string()))?;
-
-
-    let mut user_data_active: entity::password_resets::ActiveModel = user_data.into();
-    // Устанавливаем токен
-    user_data_active.token = sea_orm::ActiveValue::Set(Some(token.clone()));
-    // Обновляем запись в базе данных
-    user_data_active.update(&app_state.db)
-        .await
-        .map_err(|err| ApiResponse::new(500, err.to_string()))?;
-
-
-    Ok(api_responce::ApiResponse::new(200, format!("{{\"token\": \"{}\"}}", token)))
+    Ok(api_responce::ApiResponse::new(200, format!("Письмо отправлено")))
 }
 
 
@@ -152,43 +116,65 @@ async fn pass_examination_code(app_state: web::Data<app_state::AppState>, email_
 async fn pass_resset(app_state: web::Data<app_state::AppState>, token_and_pass: web::Json<TokenAndPass>) 
 -> Result<ApiResponse,ApiResponse> {
 
-
-    let user_ress = entity::password_resets::Entity::find()
+    //Проверка существования токена
+    let user_token = entity::password_resets::Entity::find()
     .filter(
         Condition::all()
-        .add(entity::password_resets::Column::Email.eq(&token_and_pass.email))
+        .add(entity::password_resets::Column::Token.eq(&token_and_pass.token))
+    )
+    .one(&app_state.db).await
+        .map_err(|err| ApiResponse::new(500, err.to_string()))?
+     .ok_or(ApiResponse::new(404, "Токена не существует".to_owned()))?;
+
+
+    //Проверка что токен не протух
+    let now = Utc::now().naive_utc();
+    println!("{}", now);
+    let _token_data = entity::password_resets::Entity::find()
+    .filter(
+        Condition::all()
+        .add(entity::password_resets::Column::Token.eq(&token_and_pass.token))
+        .add(entity::password_resets::Column::ExpiresDate.gt(now)) // значит что ExpiresDate > now
+    )
+    .one(&app_state.db).await
+        .map_err(|err| ApiResponse::new(500, err.to_string()))?
+     .ok_or(ApiResponse::new(410, "Токен протух".to_owned()))?;
+
+    //Проверка использованного токена
+    let token_flag = entity::password_resets::Entity::find()
+    .filter(
+        Condition::all()
         .add(entity::password_resets::Column::Token.eq(&token_and_pass.token))
         .add(entity::password_resets::Column::IsUsed.eq(false))
     )
     .one(&app_state.db).await
         .map_err(|err| ApiResponse::new(500, err.to_string()))?
-     .ok_or(ApiResponse::new(409, "Код уже использован".to_owned()))?;
-
+     .ok_or(ApiResponse::new(411, "Токен использовался".to_owned()))?;
+    
 
     let user_logins = entity::logins::Entity::find()
     .filter(
         Condition::all()
-        .add(entity::logins::Column::Email.eq(&user_ress.email))
+        .add(entity::logins::Column::Email.eq(&user_token.email))
     ).one(&app_state.db).await
         .map_err(|err| ApiResponse::new(500, err.to_string()))?
      .ok_or(ApiResponse::new(404, "Не нашли Email".to_owned()))?;
 
-
+    //Cоздание токена
     let token = encode_jwt(user_logins.email.clone(), user_logins.id as i32)
     .map_err(|err| ApiResponse::new(500, err.to_string()))?;
-
-
-    let mut user_logins_active: entity::logins::ActiveModel = user_logins.into();
+    //Хеш пароля
     let hashed_password = digest(&token_and_pass.pass);
+    //Запись токена и пароля
+    let mut user_logins_active: entity::logins::ActiveModel = user_logins.into();
     user_logins_active.pass = Set(hashed_password);
-
-
+    user_logins_active.token = Set(Some(token.clone()));
     user_logins_active.update(&app_state.db).await
     .map_err(|err| ApiResponse::new(500, err.to_string()))?;
 
 
 
-    let mut user_flag: entity::password_resets::ActiveModel = user_ress.into();
+    let mut user_flag: entity::password_resets::ActiveModel = token_flag.into();
     // Устанавливаем флаг
     user_flag.is_used = sea_orm::ActiveValue::Set(true);
     // Обновляем запись в базе данных
