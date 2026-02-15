@@ -224,10 +224,10 @@ document.addEventListener("click", function (e) {
     // Проверка пароля
     let isValid = true;
 
-    if (password.length < 6) {
+    if (password.length < 8) {
       if (passwordFeedback) {
         passwordFeedback.textContent =
-          "Пароль должен содержать минимум 6 символов";
+          "Пароль должен содержать минимум 8 символов, хотя бы одну заглавную и одну строчную букву, цифру и любой специальный символ";
         passwordFeedback.style.display = "block";
       }
       isValid = false;

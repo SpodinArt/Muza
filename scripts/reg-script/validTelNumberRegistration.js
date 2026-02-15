@@ -1,3 +1,5 @@
+// reg-script/validTelNumberRegistration.js
+
 let phoneInputInstance = null;
 
 export function initTelInput() {
@@ -13,42 +15,28 @@ export function initTelInput() {
       initialCountry: "ru",
       separateDialCode: true,
       preferredCountries: [
-        "ru",
-        "ua",
-        "by",
-        "kz",
-        "us",
-        "de",
-        "fr",
-        "cn",
-        "gb",
+        "ru", "ua", "by", "kz", "us", "de", "fr", "cn", "gb",
       ],
       utilsScript:
         "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
-      customPlaceholder: function (
-        selectedCountryPlaceholder,
-        selectedCountryData
-      ) {
+      customPlaceholder: function () {
         return "XXX-XXX-XX-XX";
       },
     });
 
-    // Сохраняем экземпляр в модульной переменной
     phoneInputInstance = iti;
 
-    // Добавляем обработчик для скрытия ошибки при вводе
+    // При вводе скрываем ошибку
     phoneInput.addEventListener("input", function () {
-      const formGroup = this.closest(".form-group");
-      if (formGroup) {
-        formGroup.classList.remove("is-invalid");
-        const feedback = formGroup.querySelector(".invalid-feedback");
-        if (feedback) {
-          feedback.style.display = "none";
-        }
-      }
+      hidePhoneError(this);
     });
 
-    // Обновляем стили
+    // При потере фокуса проверяем и показываем ошибку
+    phoneInput.addEventListener("blur", function () {
+      validatePhoneNumberAndShowError();
+    });
+
+    // Стилизация контейнера библиотеки (опционально)
     const wrapper = phoneInput.closest(".form-group");
     if (wrapper) {
       const itiContainer = wrapper.querySelector(".iti");
@@ -59,32 +47,53 @@ export function initTelInput() {
   }
 }
 
-// Валидация телефонного номера
-export function validatePhoneNumber() {
-  if (!phoneInputInstance) return false;
-  return phoneInputInstance.isValidNumber();
+// Скрыть ошибку
+function hidePhoneError(inputElement) {
+  const formGroup = inputElement.closest(".form-group");
+  if (formGroup) {
+    formGroup.classList.remove("is-invalid", "error");
+    const feedback = formGroup.querySelector(".invalid-feedback");
+    if (feedback) {
+      feedback.style.display = "none";
+    }
+  }
 }
 
-// Получение экземпляра для работы
+// Показать ошибку
+function showPhoneError(inputElement) {
+  const formGroup = inputElement.closest(".form-group");
+  if (formGroup) {
+    formGroup.classList.add("is-invalid", "error");
+    const feedback = formGroup.querySelector(".invalid-feedback");
+    if (feedback) {
+      feedback.style.display = "block";
+    }
+  }
+}
+
+// Проверка номера и отображение ошибки (возвращает true если валиден)
+export function validatePhoneNumberAndShowError() {
+  if (!phoneInputInstance) return false;
+
+  const phoneInput = document.getElementById("register-phone");
+  if (!phoneInput) return false;
+
+  const isValid = phoneInputInstance.isValidNumber();
+
+  if (isValid) {
+    hidePhoneError(phoneInput);
+  } else {
+    showPhoneError(phoneInput);
+  }
+
+  return isValid;
+}
+
+// Существующие функции (оставлены без изменений)
+export function validatePhoneNumber() {
+  return phoneInputInstance ? phoneInputInstance.isValidNumber() : false;
+}
+
 export function getPhoneInputInstance() {
   return phoneInputInstance;
 }
-// Особенности работы:
-
-// Библиотека автоматически определяет страну пользователя
-
-// При вводе номера отображается флаг выбранной страны
-
-// При клике на флаг открывается список всех стран с фильтрацией
-
-// Номер телефона автоматически форматируется в зависимости от страны
-
-// Полный номер можно получить через iti.getNumber()
-
-// Для валидации в форме регистрации можно использовать:
-
-// javascript
-// const phoneNumber = phoneInput.iti.getNumber();
-// if (!phoneInput.iti.isValidNumber()) {
-//   // Показать ошибку
-// }

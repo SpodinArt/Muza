@@ -476,3 +476,15 @@ body {
 #reset-password-form .btn-link:hover {
   text-decoration: underline;
 }
+
+/* валидация телефона */
+.form-group.is-invalid .form-control,
+.form-group.error .form-control {
+  border-color: #dc3545;
+}
+
+.form-group.is-invalid .invalid-feedback,
+.form-group.error .invalid-feedback {
+  display: block;
+  color: #dc3545;
+}
