@@ -1,4 +1,4 @@
-import { validateEmail, validatePassword } from "./validation.js";
+import { validateEmail } from "./validation.js";
 import { initLoginRequest } from "../requests/initLoginRequest.js";
 
 export function initLoginForm() {
@@ -22,14 +22,15 @@ export function initLoginForm() {
       emailError.style.display = "none";
     }
 
-    if (!validatePassword(password.value)) {
-      password.classList.add("is-invalid");
-      passwordError.style.display = "block";
-      isValid = false;
-    } else {
-      password.classList.remove("is-invalid");
-      passwordError.style.display = "none";
-    }
+    // Убираем валидацию пароля из входа 
+    // if (!validatePassword(password.value)) {
+    //   password.classList.add("is-invalid");
+    //   passwordError.style.display = "block";
+    //   isValid = false;
+    // } else {
+    //   password.classList.remove("is-invalid");
+    //   passwordError.style.display = "none";
+    // }
 
     if (isValid) {
       //проверка аутинтификации сервером

@@ -2,6 +2,7 @@
 import { validateEmail } from "../reg-script/validation.js";
 import { validatePassword } from "../reg-script/validation.js";
 import { validateLogin } from "../reg-script/validation.js";
+import { showMessage } from "../utilits/showMessage.js";
 import {
   validatePhoneNumberAndShowError,
   getPhoneInputInstance,
@@ -144,7 +145,7 @@ export function initRegisterForm() {
         return response.json();
       })
       .then((result) => {
-        alert("Регистрация прошла успешно!");
+        showMessage("Регистрация прошла успешно!", "success");
         form.reset();
         // Дополнительно можно очистить подсветку ошибок
         [
@@ -159,6 +160,7 @@ export function initRegisterForm() {
       })
       .catch((error) => {
         console.error("Ошибка:", error);
+        showMessage("Произошла ошибка попробуйте позднее", "error");
         // Здесь можно показать общее сообщение об ошибке
       });
   });

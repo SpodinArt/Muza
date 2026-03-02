@@ -1,3 +1,5 @@
+import { showMessage } from "../utilits/showMessage.js";
+
 export function initRegisterRequest(name, email, password, phone) {
  let aaa = 89887453505
   const register_json = {
@@ -50,21 +52,21 @@ console.log(register_json);
         result.message.includes("Пользователя с таким именем не существует")
       ) {
         // 2. Пользователь не существует
-        alert("Пользователя с таким именем не существует");
+        showMessage("Пользователя с таким именем не существует", "error");
       } else if (
         result.message &&
         result.message.includes("Content type error")
       ) {
         // 3. Ошибка content type
-        alert("Пошло что-то не так");
+        showMessage("Пошло что-то не так", "error");
       } else {
         // Другие ответы
         console.warn("Неизвестный формат ответа:", result);
-        alert(result.message || "Неизвестная ошибка");
+        showMessage(result.message || "Неизвестная ошибка", "error");
       }
     })
     .catch((error) => {
       console.error("Произошла ошибка:", error);
-      alert("Ошибка: " + error.message);
+      showMessage("Ошибка: " + error.message, "error");
     });
 }

@@ -1,17 +1,19 @@
+import { showMessage } from "../utilits/showMessage.js";
+
 export function initSocialAuth() {
   document.getElementById("google-login").addEventListener("click", () => {
-    alert("Вход через Google");
+    showMessage("Вход через Google", "info");
   });
 
   document.getElementById("google-register").addEventListener("click", () => {
-    alert("Регистрация через Google");
+    showMessage("Регистрация через Google", "info");
   });
 
   document.getElementById("yandex-login").addEventListener("click", () => {
-    alert("Вход через Yandex");
+    showMessage("Вход через Yandex", "info");
   });
 
   document.getElementById("yandex-register").addEventListener("click", () => {
-    alert("Регистрация через Yandex");
+    showMessage("Регистрация через Yandex", "info");
   });
 }

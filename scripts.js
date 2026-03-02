@@ -42,5 +42,6 @@ document
   .querySelector(".profile-button")
   .addEventListener("click", function (event) {
     event.preventDefault();
-    alert("Profile clicked!");
+    import { showMessage } from "./utilits/showMessage.js";
+    showMessage("Profile clicked!", "info");
   });

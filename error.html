@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ru">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Ошибка 404 - Сервер не отвечает</title>
+    <title>Страница не найдена — 404</title>
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
@@ -95,7 +95,8 @@
         max-width: 900px;
         background: rgba(0, 0, 0, 0.5);
         border-radius: 20px;
-        box-shadow: 0 0 0 1px rgba(211, 170, 88, 0.1),
+        box-shadow:
+          0 0 0 1px rgba(211, 170, 88, 0.1),
           0 0 30px rgba(211, 170, 88, 0.2),
           inset 0 0 10px rgba(170, 197, 216, 0.1);
         backdrop-filter: blur(10px);
@@ -159,7 +160,8 @@
         border-radius: 50%;
         position: relative;
         z-index: 1;
-        box-shadow: 0 0 0 10px rgba(26, 35, 126, 0.3),
+        box-shadow:
+          0 0 0 10px rgba(26, 35, 126, 0.3),
           0 0 30px rgba(170, 197, 216, 0.5);
         display: flex;
         justify-content: center;
@@ -431,7 +433,7 @@
 
       <!-- Заголовок -->
       <div class="starship-header">
-        <h1>Критическая Неисправность</h1>
+        <h1>Страница не найдена</h1>
       </div>
 
       <!-- Контент ошибки -->
@@ -445,19 +447,11 @@
         </div>
 
         <div class="error-details">
-          <div class="error-message">
-            Обнаружена аномалия в центральном процессоре звездолета
-          </div>
+          <div class="error-message">Запрашиваемая страница не найдена</div>
 
           <div class="error-description">
-            Наши сенсоры не могут установить связь с сервером навигации.
-            Возможно, он временно отключен или переместился в другую точку
-            пространства-времени.
-          </div>
-
-          <div class="server-status">
-            <div class="status-indicator"></div>
-            <div class="status-text">Статус: Сервер не обнаружен</div>
+            Запрашиваемая страница не существует, возможно, она была удалена или
+            перемещена.
           </div>
         </div>
       </div>
@@ -465,38 +459,30 @@
       <!-- Рекомендации -->
       <div class="troubleshooting">
         <h3>
-          <i class="fas fa-tools"></i>
-          Процедуры восстановления
+          <i class="fas fa-info-circle"></i>
+          Что можно сделать
         </h3>
         <ul class="error-description">
           <li>
+            <i class="fas fa-home"></i>
+            Вернуться на главную страницу
+          </li>
+          <li>
             <i class="fas fa-sync-alt"></i>
-            Инициировать перезапуск сервера через 5 минут
+            Обновить текущую страницу
           </li>
           <li>
-            <i class="fas fa-wifi"></i>
-            Проверить стабильность гиперпространственного соединения
-          </li>
-          <li>
-            <i class="fas fa-shield-alt"></i>
-            Убедиться в отсутствии вмешательства темной материи
-          </li>
-          <li>
-            <i class="fas fa-robot"></i>
-            Запросить диагностику у бортового ИИ
-          </li>
-          <li>
-            <i class="fas fa-headset"></i>
-            Связаться с Центром управления полетами
+            <i class="fas fa-search"></i>
+            Проверить правильность адреса
           </li>
         </ul>
       </div>
 
       <!-- Кнопки действий -->
       <div class="action-buttons">
-        <a href="guest" class="btn btn-primary">
+        <a href="registration" class="btn btn-primary">
           <i class="fas fa-home"></i>
-          Вернуться на главную панель
+          Вернуться на главную страницу
         </a>
       </div>
     </div>
