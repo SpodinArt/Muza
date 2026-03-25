@@ -62,8 +62,15 @@ pub async fn register(
 
     match user_model {
         Ok(user) => {
-            // Генерируем токен вместо возврата ID
+                // Генерируем токен вместо возврата ID
             let token = encode_jwt(user.email.clone(), user.id as i32)
+                .map_err(|err| ApiResponse::new(500, err.to_string()))?;
+            let mut user_data_active: entity::logins::ActiveModel = user.into();
+                // Устанавливаем токен
+            user_data_active.token = sea_orm::ActiveValue::Set(Some(token.clone()));
+                // Обновляем запись в базе данных
+            user_data_active.update(&app_state.db)
+                .await
                 .map_err(|err| ApiResponse::new(500, err.to_string()))?;
             
             // Возвращаем токен в формате JSON
