@@ -37,8 +37,8 @@ function showResetPasswordForm() {
   });
   document.getElementById("form-input-mail").parentElement.style.display =
     "block";
-    
-     // Убедимся, что заголовок формы виден
+
+  // Убедимся, что заголовок формы виден
   const formTitle = document.querySelector("#reset-password-form h2");
   if (formTitle) formTitle.style.display = "block";
 
@@ -200,7 +200,7 @@ document
 document.addEventListener("click", function (e) {
   if (e.target && e.target.id === "send-2pass-btn") {
     e.preventDefault();
-    
+
     if (!window.resetToken) {
       showMessage("Ошибка: токен не найден", "error");
       return;

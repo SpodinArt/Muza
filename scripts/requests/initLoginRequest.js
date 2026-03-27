@@ -42,7 +42,7 @@ export function initLoginRequest(email, password) {
       if (result.token) {
         // 1. Если есть токен - переходим на create
         localStorage.setItem("authToken", result.token);
-        window.location.replace("registration");
+        window.location.replace("create");
       } else if (
         result.message &&
         result.message.includes("Пользователя с таким именем не существует")

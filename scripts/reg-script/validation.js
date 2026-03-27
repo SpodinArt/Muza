@@ -44,7 +44,7 @@ export function validatePhone(phone) {
   if (!phone.trim()) return false;
 
   // Очистка от дефисов, скобок и пробелов (нормализация в E.164)
-  const cleaned = phone.replace(/[^\d+]/g, "");
+  const cleaned = phone.replace(/[^\d+]/g, "").replace(/^\+7/, "+").replace(/^\+8/, "+");
 
   // Проверка формата: начинается с +, затем только цифры
   if (!/^\+\d+$/.test(cleaned)) return false;

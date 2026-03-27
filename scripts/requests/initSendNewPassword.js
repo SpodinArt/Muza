@@ -51,6 +51,8 @@ export function initSendNewPassword(token, newPassword) {
     })
     .catch((error) => {
       console.error("Ошибка при изменении пароля:", error);
-      throw new Error("Произошла ошибка при изменении пароля попробуйте еще раз");
+      throw new Error(
+        "Произошла ошибка при изменении пароля попробуйте еще раз",
+      );
     });
 }

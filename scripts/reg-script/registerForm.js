@@ -7,6 +7,7 @@ import {
   validatePhoneNumberAndShowError,
   getPhoneInputInstance,
 } from "./validTelNumberRegistration.js";
+import { initRegisterRequest } from "../requests/initRegisterRequest.js";
 
 export function initRegisterForm() {
   const form = document.querySelector("#register-form");
@@ -115,53 +116,14 @@ export function initRegisterForm() {
       return;
     }
 
-    // Все проверки пройдены – собираем данные для отправки
+    // Все проверки пройдены – отправляем запрос через initRegisterRequest
     const phoneInstance = getPhoneInputInstance();
     const phoneNumber = phoneInstance ? phoneInstance.getNumber() : "";
 
-    const data = {
-      name: name, // уже валидировано и обрезано
-      email: emailValid ? emailValid : email, // validateEmail возвращает нормализованный email или false, поэтому используем emailValid если это строка
-      phone: phoneNumber,
-      password: password,
-    };
+    // Используем нормализованный email, если он был получен от validateEmail
+    const finalEmail = typeof emailValid === "string" ? emailValid : email;
 
-    // Внимание: validateEmail возвращает либо false, либо нормализованный email (в нижнем регистре)
-    // Поэтому если emailValid не false, то это строка, её и используем
-    if (typeof emailValid === "string") {
-      data.email = emailValid;
-    }
-
-    // Отправка на сервер
-    fetch("/api/register", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data),
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Ошибка сервера");
-        }
-        return response.json();
-      })
-      .then((result) => {
-        showMessage("Регистрация прошла успешно!", "success");
-        form.reset();
-        // Дополнительно можно очистить подсветку ошибок
-        [
-          nameInput,
-          emailInput,
-          passwordInput,
-          confirmInput,
-          phoneInput,
-        ].forEach((input) => {
-          if (input) hideFieldError(input.id);
-        });
-      })
-      .catch((error) => {
-        console.error("Ошибка:", error);
-        showMessage("Произошла ошибка попробуйте позднее", "error");
-        // Здесь можно показать общее сообщение об ошибке
-      });
+    // Вызываем функцию из initRegisterRequest.js
+    initRegisterRequest(name, finalEmail, password, phoneNumber);
   });
 }

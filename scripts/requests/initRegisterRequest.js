@@ -1,14 +1,14 @@
 import { showMessage } from "../utilits/showMessage.js";
+
 export function initRegisterRequest(name, email, password, phone) {
-  // 1. Оставляем только цифры и создаем BigInt
-  // (например, "+79991234567" станет 79991234567n)
-  const aaa = BigInt(phone.replace(/\D/g, ""));
+  // 1. Очистка номера телефона
+  const cleanPhone = phone.replace(/[^0-9]/g, "");
 
   const register_json = {
     login: name,
     email: email,
     password: password,
-    phone_number: aaa,
+    phone_number: Number(cleanPhone),
   };
 
   console.log("Данные для отправки:", register_json);
@@ -18,62 +18,49 @@ export function initRegisterRequest(name, email, password, phone) {
     headers: {
       "Content-Type": "application/json",
     },
-    // 2. JSON.stringify не умеет работать с BigInt по умолчанию,
-    // поэтому добавляем функцию-реплейсер, чтобы убрать кавычки (передать как число)
-    body: JSON.stringify(register_json, (key, value) =>
-      typeof value === "bigint" ? Number(value) : value,
-    ),
+    body: JSON.stringify(register_json),
   })
     .then(async (response) => {
-      console.log("отправлено");
-      console.log("слушаю");
-
-      // Пытаемся получить ответ как текст сначала
       const responseText = await response.text();
-
       let result;
+
       try {
-        // Пытаемся парсить как JSON
         result = JSON.parse(responseText);
       } catch (e) {
-        // Если не JSON, то это текстовая ошибка
         result = { message: responseText };
       }
 
-      if (!response.ok) {
-        throw new Error(result.message || `Ошибка HTTP: ${response.status}`);
-      }
-
+      // Если сервер прислал ошибку (400, 500 и т.д.),
+      // мы не кидаем throw, а передаем результат дальше для проверки текста
       return result;
     })
     .then((result) => {
       console.log("Получено от сервера:", result);
 
-      // Проверяем тип ответа
+      // 1. Успешная регистрация (есть токен)
       if (result.token) {
-        // 1. Если есть токен - переходим на create
         localStorage.setItem("authToken", result.token);
-        window.location.replace("registration");
-      } else if (
-        result.message &&
-        result.message.includes("Пользователя с таким именем не существует")
-      ) {
-        // 2. Пользователь не существует
-        showMessage("Пользователя с таким именем не существует", "error");
-      } else if (
-        result.message &&
-        result.message.includes("Content type error")
-      ) {
-        // 3. Ошибка content type
-         showMessage("Пошло что-то не так", "error");
+        window.location.replace("create");
+        return;
+      }
+
+      // 2. Проверка текстовых сообщений (даже если это ошибка)
+      const msg = result.message || "";
+
+      if (msg.includes("Мыло уже существует чувак")) {
+        showMessage("Email уже зарегистрирован", "error");
+      } else if (msg.includes("Твой логин уже поюзали")) {
+        showMessage("Пользователь с таким именем уже зарегистрирован", "error");
+      } else if (msg.includes("Content type error")) {
+        showMessage("Пошло что-то не так", "error");
       } else {
-        // Другие ответы
+        // Если ничего не подошло
         console.warn("Неизвестный формат ответа:", result);
-        showMessage(result.message || "Неизвестная ошибка", "error");
+        showMessage(msg || "Неизвестная ошибка", "error");
       }
     })
     .catch((error) => {
-      console.error("Произошла ошибка:", error);
-       showMessage("Ошибка: " + error.message, "error");
+      console.error("Сетевая ошибка или ошибка кода:", error);
+      showMessage("Ошибка соединения: " + error.message, "error");
     });
 }
