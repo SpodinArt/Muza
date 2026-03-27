@@ -1,21 +1,28 @@
 import { showMessage } from "../utilits/showMessage.js";
-
 export function initRegisterRequest(name, email, password, phone) {
- let aaa = 89887453505
+  // 1. Оставляем только цифры и создаем BigInt
+  // (например, "+79991234567" станет 79991234567n)
+  const aaa = BigInt(phone.replace(/\D/g, ""));
+
   const register_json = {
     login: name,
     email: email,
     password: password,
     phone_number: aaa,
-    //phone_number: phone,
   };
-console.log(register_json);
+
+  console.log("Данные для отправки:", register_json);
+
   fetch("http://127.0.0.1:8080/auth/register", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(register_json),
+    // 2. JSON.stringify не умеет работать с BigInt по умолчанию,
+    // поэтому добавляем функцию-реплейсер, чтобы убрать кавычки (передать как число)
+    body: JSON.stringify(register_json, (key, value) =>
+      typeof value === "bigint" ? Number(value) : value,
+    ),
   })
     .then(async (response) => {
       console.log("отправлено");
@@ -58,7 +65,7 @@ console.log(register_json);
         result.message.includes("Content type error")
       ) {
         // 3. Ошибка content type
-        showMessage("Пошло что-то не так", "error");
+         showMessage("Пошло что-то не так", "error");
       } else {
         // Другие ответы
         console.warn("Неизвестный формат ответа:", result);
@@ -67,6 +74,6 @@ console.log(register_json);
     })
     .catch((error) => {
       console.error("Произошла ошибка:", error);
-      showMessage("Ошибка: " + error.message, "error");
+       showMessage("Ошибка: " + error.message, "error");
     });
 }
